@@ -3,6 +3,7 @@ import { ArrowRight, Download, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import HangingBadge from "./HangingBadge";
 import { useLanguage } from "@/i18n/LanguageContext";
+import curriculumPdf from "@/assets/archieve/curriculum_jonh.pdf";
 
 const Hero = () => {
   const prefersReduced = useReducedMotion();
@@ -46,7 +47,7 @@ const Hero = () => {
               <Link to="/projects" className="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg font-heading font-semibold text-sm bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
                 {t.hero.viewProjects} <ArrowRight className="w-4 h-4" />
               </Link>
-              <a href="#" className="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg font-heading font-semibold text-sm border border-border bg-secondary/50 text-secondary-foreground hover:bg-secondary transition-colors">
+              <a href={curriculumPdf} download="curriculum_jonh.pdf" className="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg font-heading font-semibold text-sm border border-border bg-secondary/50 text-secondary-foreground hover:bg-secondary transition-colors">
                 <Download className="w-4 h-4" /> {t.hero.downloadCV}
               </a>
               <Link to="/contact" className="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg font-heading font-semibold text-sm border border-border/50 text-muted-foreground hover:text-foreground hover:border-border transition-colors">
