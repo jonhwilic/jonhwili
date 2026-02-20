@@ -10,7 +10,6 @@ const WhatIDo = () => {
 
   return (
     <section className="relative py-24">
-      <div className="glow-separator mb-24" />
       <div className="container">
         <div className="text-center mb-14">
           <span className="tag-chip text-xs mb-4 inline-flex">{t.whatIDo.chip}</span>

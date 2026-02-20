@@ -156,6 +156,36 @@ export const translations = {
          { title: "Teaching Degree in Mathematics (in progress) — IFES", detail: "Expected Jun 2026" },
        ],
     },
+    // Projects
+    projects: {
+      chip: "Selected Work",
+      title: "My",
+      titleAccent: "Projects",
+      subtitle: "A selection of institutional and creative websites I built.",
+      items: {
+        balletDaCidade: {
+          title: "Ballet da Cidade",
+          category: "Institutional",
+          description:
+            "Institutional website for Ballet da Cidade, a cultural dance school. Built with a focus on elegance and visual storytelling, presenting the school's programs, schedule, and artistic identity.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS"],
+        },
+        kardiah: {
+          title: "Kardiah",
+          category: "E-commerce / Fashion",
+          description:
+            "E-commerce platform for a fashion brand. Designed with performance and conversion in mind, featuring a product catalog, filtering, and a streamlined checkout experience.",
+          stack: ["React", "TypeScript", "REST API"],
+        },
+        portelaFilmes: {
+          title: "Portela Filmes",
+          category: "Institutional / Creative",
+          description:
+            "Portfolio website for Portela Filmes, a film production company. A visually immersive experience showcasing their work, reel, and creative identity.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS"],
+        },
+      },
+    },
     // Command Palette
     command: {
       searchPlaceholder: "Search pages & projects...",
@@ -328,6 +358,36 @@ export const translations = {
          { title: "Pós-Graduação — Desenvolvimento de Aplicações Web — FACPRISMA", detail: "Jun 2024 – Nov 2024" },
          { title: "Licenciatura em Matemática (em andamento) — IFES", detail: "Previsão Jun 2026" },
        ],
+    },
+    // Projects
+    projects: {
+      chip: "Trabalhos Selecionados",
+      title: "Meus",
+      titleAccent: "Projetos",
+      subtitle: "Uma seleção de sites institucionais e criativos que desenvolvi.",
+      items: {
+        balletDaCidade: {
+          title: "Ballet da Cidade",
+          category: "Institucional",
+          description:
+            "Site institucional para o Ballet da Cidade, uma escola cultural de dança. Desenvolvido com foco em elegância e narrativa visual, apresentando os programas, horários e identidade artística da escola.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS"],
+        },
+        kardiah: {
+          title: "Kardiah",
+          category: "E-commerce / Moda",
+          description:
+            "Plataforma de e-commerce para uma marca de moda. Projetado com foco em performance e conversão, com catálogo de produtos, filtros e uma experiência de checkout simplificada.",
+          stack: ["React", "TypeScript", "REST API"],
+        },
+        portelaFilmes: {
+          title: "Portela Filmes",
+          category: "Institucional / Criativo",
+          description:
+            "Site de portfólio para a Portela Filmes, uma produtora audiovisual. Uma experiência visualmente imersiva que apresenta seus trabalhos, reel e identidade criativa.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS"],
+        },
+      },
     },
     // Command Palette
     command: {
