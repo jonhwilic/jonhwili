@@ -8,6 +8,7 @@ import Layout from "@/components/Layout";
 import Index from "./pages/Index";
 import Timeline from "./pages/Timeline";
 import About from "./pages/About";
+import Projects from "./pages/Projects";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
               <Route path="/timeline" element={<Timeline />} />
+              <Route path="/projects" element={<Projects />} />
             </Routes>
           </Layout>
         </BrowserRouter>
