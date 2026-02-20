@@ -129,6 +129,33 @@ export const translations = {
         },
       ],
     },
+    // About
+    about: {
+      chip: "About",
+      greeting: "Hi, I'm",
+      bio: [
+         "I'm a Front-End Engineer with 6+ years of experience building web applications that perform, scale, and are accessible to everyone. I specialize in MarTech, building front-ends that marketing teams can measure, optimize, and experiment with.",
+         "I work with React and Next.js daily, using TypeScript 100% of the time. I care deeply about Core Web Vitals, semantic HTML, keyboard navigation, and building UI systems that teams can trust over time.",
+         "Beyond front-end, I bring versatility: Python automations, ERP experience with TOTVS and Sankhya, Java development, and SQL data manipulation. I believe great front-end engineers understand the full stack.",
+       ],
+       experience: "Experience",
+       timeline: [
+         { year: "2018–2022", title: "Front-End Developer", desc: "Built e-commerce, institutional, and ERP web systems using React + TypeScript." },
+         { year: "2022–Present", title: "Front-End Engineer — MarTech Specialist", desc: "Delivering MarTech platforms, analytics dashboards, and performance-oriented web applications." },
+       ],
+       howIWork: "How I Work",
+       howIWorkCards: [
+         { title: "Collaboration", desc: "Close partnership with designers and UX teams, translating Figma specs into pixel-perfect, accessible components." },
+         { title: "Code Quality", desc: "GitHub PRs with thorough reviews, clear commit history, and a strong focus on maintainable code." },
+         { title: "Documentation", desc: "Component documentation, ADRs, and knowledge sharing are part of my daily workflow." },
+       ],
+       education: "Education",
+       educationList: [
+         { title: "B.Sc. in Information Systems — UCL", detail: "Completed 2022" },
+         { title: "Postgraduate — Web Application Development — FACPRISMA", detail: "Jun 2024 – Nov 2024" },
+         { title: "Teaching Degree in Mathematics (in progress) — IFES", detail: "Expected Jun 2026" },
+       ],
+    },
     // Command Palette
     command: {
       searchPlaceholder: "Search pages & projects...",
@@ -274,6 +301,33 @@ export const translations = {
           tags: ["Militar", "Liderança", "Marinha do Brasil"],
         },
       ],
+    },
+    // About
+    about: {
+      chip: "Sobre",
+      greeting: "Olá, eu sou",
+      bio: [
+        "Sou Engenheiro Front-End com mais de 6 anos de experiência construindo aplicações web que performam, escalam e são acessíveis para todos. Sou especialista no contexto MarTech, construindo front-ends que times de marketing podem medir, otimizar e experimentar.",
+        "Trabalho com React e Next.js diariamente, usando TypeScript 100% do tempo. Me preocupo profundamente com Core Web Vitals, HTML semântico, navegação por teclado e construção de sistemas de UI confiáveis ao longo do tempo.",
+        "Além do front-end, trago versatilidade: automações em Python, experiência com ERPs TOTVS e Sankhya, desenvolvimento Java e manipulação de dados SQL. Acredito que grandes engenheiros front-end entendem a stack completa.",
+      ],
+      experience: "Experiência",
+      timeline: [
+        { year: "2018–2022", title: "Desenvolvedor Front-End", desc: "Construí sistemas web de e-commerce, institucionais e ERP usando React + TypeScript." },
+        { year: "2022–Presente", title: "Engenheiro Front-End — Foco em MarTech", desc: "Entregando plataformas MarTech, dashboards analíticos e aplicações web orientadas a performance." },
+      ],
+      howIWork: "Como Trabalho",
+      howIWorkCards: [
+        { title: "Colaboração", desc: "Parceria próxima com designers e times de UX, traduzindo specs do Figma em componentes pixel-perfect e acessíveis." },
+        { title: "Qualidade de Código", desc: "PRs no GitHub com reviews detalhados, histórico de commits claro e forte foco em código manutenível." },
+        { title: "Documentação", desc: "Documentação de componentes, ADRs e compartilhamento de conhecimento fazem parte do meu fluxo diário." },
+      ],
+      education: "Educação",
+       educationList: [
+         { title: "Bacharelado em Sistemas de Informação — UCL", detail: "Concluído em 2022" },
+         { title: "Pós-Graduação — Desenvolvimento de Aplicações Web — FACPRISMA", detail: "Jun 2024 – Nov 2024" },
+         { title: "Licenciatura em Matemática (em andamento) — IFES", detail: "Previsão Jun 2026" },
+       ],
     },
     // Command Palette
     command: {
