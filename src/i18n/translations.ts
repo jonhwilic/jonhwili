@@ -186,6 +186,22 @@ export const translations = {
         },
       },
     },
+    // Contact
+    contact: {
+      chip: "Get in Touch",
+      title: "Let's",
+      titleAccent: "connect",
+      subtitle: "Have a project in mind or want to discuss opportunities? Drop me a message.",
+      name: "Name",
+      namePlaceholder: "Your name",
+      email: "Email",
+      emailPlaceholder: "you@example.com",
+      message: "Message",
+      messagePlaceholder: "Tell me about your project...",
+      send: "Send Message",
+      sent: "Message sent!",
+      sentDesc: "Thanks for reaching out. I'll get back to you soon.",
+    },
     // Command Palette
     command: {
       searchPlaceholder: "Search pages & projects...",
@@ -388,6 +404,22 @@ export const translations = {
           stack: ["Next.js", "TypeScript", "Tailwind CSS"],
         },
       },
+    },
+    // Contact
+    contact: {
+      chip: "Fale Comigo",
+      title: "Vamos nos",
+      titleAccent: "conectar",
+      subtitle: "Tem um projeto em mente ou quer discutir oportunidades? Me envie uma mensagem.",
+      name: "Nome",
+      namePlaceholder: "Seu nome",
+      email: "Email",
+      emailPlaceholder: "voce@exemplo.com",
+      message: "Mensagem",
+      messagePlaceholder: "Me conte sobre seu projeto...",
+      send: "Enviar Mensagem",
+      sent: "Mensagem enviada!",
+      sentDesc: "Obrigado pelo contato. Responderei em breve.",
     },
     // Command Palette
     command: {

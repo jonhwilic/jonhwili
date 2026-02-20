@@ -11,10 +11,10 @@ const Hero = () => {
     prefersReduced
       ? {}
       : {
-          initial: { opacity: 0, y: 24 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.6, delay, ease: "easeOut" as const },
-        };
+        initial: { opacity: 0, y: 24 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, delay, ease: "easeOut" as const },
+      };
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
@@ -43,7 +43,7 @@ const Hero = () => {
             </motion.p>
 
             <motion.div {...fadeUp(0.5)} className="flex flex-wrap gap-3 mb-12">
-              <Link to="/timeline" className="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg font-heading font-semibold text-sm bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
+              <Link to="/projects" className="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg font-heading font-semibold text-sm bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
                 {t.hero.viewProjects} <ArrowRight className="w-4 h-4" />
               </Link>
               <a href="#" className="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg font-heading font-semibold text-sm border border-border bg-secondary/50 text-secondary-foreground hover:bg-secondary transition-colors">
