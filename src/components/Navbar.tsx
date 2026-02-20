@@ -14,7 +14,6 @@ const Navbar = () => {
   const navItems = [
     { label: t.nav.home, path: "/" },
     { label: t.nav.about, path: "/about" },
-    { label: t.nav.timeline, path: "/timeline" },
     { label: t.nav.projects, path: "/projects" },
     { label: t.nav.contact, path: "/contact" },
   ];
