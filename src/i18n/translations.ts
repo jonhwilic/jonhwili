@@ -33,21 +33,21 @@ export const translations = {
       titleAccent: "impact",
       cards: [
         {
-          title: "Performance & Core Web Vitals",
-          description: "Fast websites aren't a luxury — they're a competitive advantage. I obsess over load times, SSR/SSG/ISR strategies, code splitting, and image optimization so your users never wait and Google always notices.",
+          title: "Performance and user experience",
+          description: "I work to reduce load times and improve navigation smoothness, with a focus on Core Web Vitals and front-end best practices. This includes image optimization, efficient loading strategies, and approaches like SSR/SSG/ISR when they make sense for the project.",
         },
         {
-          title: "Design Systems & Architecture",
-          description: "Pixel-perfect interfaces that scale. I build component libraries with strict design tokens and composable patterns — so your team ships faster and your UI stays consistent as the product grows.",
+          title: "Consistent UI that’s easy to scale",
+          description: "I build a reusable component foundation (buttons, cards, forms) with clear styling rules. The result is a consistent interface, faster development, and new screens that don’t turn into a “Frankenstein.” (Design tokens, patterns, and architecture built for scale.)",
         },
         {
-          title: "MarTech Readiness",
-          description: "Great front-ends don't just look good — they convert. I architect SEO-first, tracking-ready UIs built for experimentation, giving your marketing team the foundation to measure, test, and grow.",
+          title: "Built to measure and improve results",
+          description: "It’s not just about looking good—it’s about being ready to grow. I deliver front-ends prepared for SEO, tracking (analytics/pixels), conversion events, and A/B testing, so marketing can measure what works and the product can evolve with data.",
         },
       ],
     },
-    // Timeline page
-    timelinePage: {
+    // Timeline
+    timeline: {
       chip: "My Journey",
       title: "Professional",
       titleAccent: "Timeline",
@@ -252,21 +252,21 @@ export const translations = {
       titleAccent: "impacto",
       cards: [
         {
-          title: "Performance & Core Web Vitals",
-          description: "Site rápido não é detalhe — é vantagem competitiva. Cuido de cada milissegundo: estratégias SSR/SSG/ISR, carregamento inteligente e imagens otimizadas para que o usuário nunca espere e o Google sempre note.",
+          title: "Performance e experiência de uso",
+          description: "Eu trabalho para reduzir tempo de carregamento e melhorar a fluidez da navegação, com foco em Core Web Vitals e boas práticas de front-end. Isso inclui otimização de imagens, carregamento eficiente e estratégias como SSR/SSG/ISR quando fazem sentido para o projeto.",
         },
         {
-          title: "Design Systems & Arquitetura",
-          description: "Interfaces que encantam e escalam. Crio bibliotecas de componentes com tokens de design rigorosos e padrões reutilizáveis — para que seu time entregue mais rápido e o produto cresça sem perder a consistência visual.",
+          title: "Interface consistente e fácil de evoluir",
+          description: "Eu crio uma base de componentes reutilizáveis (botões, cards, formulários) com regras claras de estilo. O resultado: o produto fica bonito e consistente, o time desenvolve mais rápido, e novas telas saem sem virar um “Frankenstein”. (Tokens, padrões e arquitetura pensados pra escala.)",
         },
         {
-          title: "Prontidão MarTech",
-          description: "Bom front-end não é só bonito — ele converte. Construo interfaces SEO-first, prontas para rastreamento e experimentação, dando ao time de marketing a base para medir, testar e crescer de verdade.",
+          title: "Site pronto para medir e melhorar resultados",
+          description: "Não é só “ficar bonito”: é estar pronto para vender e crescer. Eu entrego o front já preparado para SEO, rastreamento (analytics/pixels), eventos de conversão e testes A/B — pra marketing medir o que funciona e o produto evoluir com dados.",
         },
       ],
     },
     // Timeline
-    timelinePage: {
+    timeline: {
       chip: "Minha Jornada",
       title: "Linha do",
       titleAccent: "Tempo",
