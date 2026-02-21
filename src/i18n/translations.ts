@@ -20,7 +20,7 @@ export const translations = {
       downloadCV: "Download CV",
       contact: "Contact",
       credibility: [
-        "6+ years Front-End",
+        "7+ years Front-End",
         "MarTech",
         "TypeScript",
         "REST + GraphQL • React Query • Jest",
@@ -134,7 +134,7 @@ export const translations = {
       chip: "About",
       greeting: "Hi, I'm",
       bio: [
-         "I'm a Front-End Engineer with 6+ years of experience building web applications that perform, scale, and are accessible to everyone. I specialize in MarTech, building front-ends that marketing teams can measure, optimize, and experiment with.",
+         "I'm a Front-End Engineer with 7+ years of experience building web applications that perform, scale, and are accessible to everyone. I specialize in MarTech, building front-ends that marketing teams can measure, optimize, and experiment with.",
          "I work with React and Next.js daily, using TypeScript 100% of the time. I care deeply about Core Web Vitals, semantic HTML, keyboard navigation, and building UI systems that teams can trust over time.",
          "Beyond front-end, I bring versatility: Python automations, ERP experience with TOTVS and Sankhya, Java development, and SQL data manipulation. I believe great front-end engineers understand the full stack.",
        ],
@@ -163,23 +163,44 @@ export const translations = {
       titleAccent: "Projects",
       subtitle: "A selection of institutional and creative websites I built.",
       items: {
+        institutionalTotalpass: {
+          title: "TotalPass",
+          category: "Institutional | Corporate",
+          description:
+            "Institutional website for TotalPass. Built with a focus on elegance and visual storytelling, presenting the company's programs, identity, and corporate positioning.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS", "Rest API", "GraphQL", "Salesforce Integration"],
+        },
+        mapTotalpass: {
+          title: "Gym Map",
+          category: "Institutional | Corporate",
+          description:
+            "Web page for the TotalPass gym map. This project solved a recurring question when the product was presented: 'Which gyms can I use with TotalPass?'. Creating the map facilitated the product onboarding phase and consequently increased company revenue.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS", "Rest API", "GraphQL"],
+        },
+        blogTotalpass: {
+          title: "TotalPass Blog",
+          category: "Institutional | Corporate",
+          description:
+            "Blog created for TotalPass with a focus on sharing wellness, health, and more content for both corporate and individual audiences. The blog is ranked with high relevance in the content it aims to produce.",
+          stack: ["PHP", "jQuery", "WordPress", "JavaScript"],
+        },
         balletDaCidade: {
           title: "Ballet da Cidade",
-          category: "Institutional",
+          category: "Institutional | Dance School",
           description:
             "Institutional website for Ballet da Cidade, a cultural dance school. Built with a focus on elegance and visual storytelling, presenting the school's programs, schedule, and artistic identity.",
           stack: ["Next.js", "TypeScript", "Tailwind CSS"],
         },
         kardiah: {
           title: "Kardiah",
-          category: "E-commerce / Fashion",
+          category: "Institutional | Dance School",
           description:
-            "E-commerce platform for a fashion brand. Designed with performance and conversion in mind, featuring a product catalog, filtering, and a streamlined checkout experience.",
-          stack: ["React", "TypeScript", "REST API"],
+            "Institutional website for Kardiah dance school. The design and construction of the site aimed to evoke the beauty and lightness of dance movements.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS"],
         },
         portelaFilmes: {
           title: "Portela Filmes",
-          category: "Institutional / Creative",
+          category: "Institutional | Creative",
           description:
             "Portfolio website for Portela Filmes, a film production company. A visually immersive experience showcasing their work, reel, and creative identity.",
           stack: ["Next.js", "TypeScript", "Tailwind CSS"],
@@ -239,7 +260,7 @@ export const translations = {
       downloadCV: "Baixar CV",
       contact: "Contato",
       credibility: [
-        "6+ anos de Front-End",
+        "7+ anos de Front-End",
         "MarTech",
         "TypeScript",
         "REST + GraphQL • React Query • Jest",
@@ -382,23 +403,44 @@ export const translations = {
       titleAccent: "Projetos",
       subtitle: "Uma seleção de sites institucionais e criativos que desenvolvi.",
       items: {
+        institutionalTotalpass: {
+          title: "TotalPass",
+          category: "Institucional | Empresa",
+          description:
+            "Site institucional para o Ballet da Cidade, uma escola cultural de dança. Desenvolvido com foco em elegância e narrativa visual, apresentando os programas, horários e identidade artística da escola.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS", "Rest API", "GraphQL", "Salesforce Integration"],
+        },
+        mapTotalpass: {
+          title: "Mapa de Academias",
+          category: "Institucional | Empresa",
+          description:
+            "Página web do mapa de academias TotalPass. Esse projeto solucionou uma questão recorrente quando o produto era apresentado: 'Quais academias posso usar com TotalPass?'. A criação do mapa facilitou a fase de contratação do produto e por consequência o aumento de receita da empresa.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS", "Rest API", "GraphQL"],
+        },
+        blogTotalpass: {
+          title: "Blog TotalPass",
+          category: "Institucional | Empresa",
+          description:
+            "Blog criado para a empresa TotalPass com foco em compartilhar conteúdos de bem-estar, saúde e muito mais para o ambiente corporativo e individual. O blog está rankeado com alta relevância nos conteúdos que se propõe a produzir.",
+          stack: ["PHP", "jQuery", "WordPress", "JavaScript"],
+        },
         balletDaCidade: {
           title: "Ballet da Cidade",
-          category: "Institucional",
+          category: "Institucional | Escola de Dança",
           description:
             "Site institucional para o Ballet da Cidade, uma escola cultural de dança. Desenvolvido com foco em elegância e narrativa visual, apresentando os programas, horários e identidade artística da escola.",
           stack: ["Next.js", "TypeScript", "Tailwind CSS"],
         },
         kardiah: {
           title: "Kardiah",
-          category: "E-commerce / Moda",
+          category: "Institucional | Escola de Dança",
           description:
-            "Plataforma de e-commerce para uma marca de moda. Projetado com foco em performance e conversão, com catálogo de produtos, filtros e uma experiência de checkout simplificada.",
-          stack: ["React", "TypeScript", "REST API"],
+            "Site institucional para a escola de dança Kardiah. O design e construção do site buscou lembrar a beleza e leveza dos movimentos da dança.",
+          stack: ["Next.js", "TypeScript", "Tailwind CSS"],
         },
         portelaFilmes: {
           title: "Portela Filmes",
-          category: "Institucional / Criativo",
+          category: "Institucional | Criativo",
           description:
             "Site de portfólio para a Portela Filmes, uma produtora audiovisual. Uma experiência visualmente imersiva que apresenta seus trabalhos, reel e identidade criativa.",
           stack: ["Next.js", "TypeScript", "Tailwind CSS"],

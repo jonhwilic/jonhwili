@@ -1,11 +1,33 @@
 import { motion } from "framer-motion";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { ExternalLink } from "lucide-react";
+
 import balletGif from "@/assets/ballet-da-cidade.gif";
 import kardiahGif from "@/assets/kardiah.gif";
 import portelaGif from "@/assets/portela-filmes.gif";
-import { ExternalLink } from "lucide-react";
+import totalpassBlogGif from "@/assets/blog-totalpass.gif";
+import totalpassInstitutionalGif from "@/assets/totalpass-institucional.gif";
+import totalpassMapGif from "@/assets/mapa-totalpass.gif";
 
 const projects = [
+  {
+    id: "institutional-totalpass",
+    gif: totalpassInstitutionalGif,
+    titleKey: "institutionalTotalpass",
+    url: 'https://totalpass.com/br/',
+  },
+  {
+    id: "map-totalpass",
+    gif: totalpassMapGif,
+    titleKey: "mapTotalpass",
+    url: 'https://totalpass.com/br/mapa/',
+  },
+  {
+    id: "blog-totalpass",
+    gif: totalpassBlogGif,
+    titleKey: "blogTotalpass",
+    url: 'https://totalpass.com/br/blog/',
+  },
   {
     id: "ballet-da-cidade",
     gif: balletGif,
