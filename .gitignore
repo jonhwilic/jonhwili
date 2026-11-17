@@ -25,3 +25,6 @@ dist-ssr
 
 # pre-render build step (scripts/prerender.mjs)
 dist-server
+
+# impeccable session cache
+.impeccable/hook.cache.json

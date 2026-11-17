@@ -24,8 +24,10 @@
 
   <!-- Vercel Web Analytics + Speed Insights (cookieless; enable both in the Vercel dashboard). -->
   <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    window.vaq = window.vaq || [];
+    window.siq = window.siq || [];
+    window.va = window.va || ((...args) => window.vaq.push(args));
+    window.si = window.si || ((...args) => window.siq.push(args));
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
