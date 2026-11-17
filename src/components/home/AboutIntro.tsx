@@ -8,7 +8,7 @@ import {
 import { ArrowRight, MapPin } from "lucide-react";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import profilePhoto from "@/assets/foto_rosto.jpg";
+import profilePhotoLarge from "@/assets/foto_rosto-640.webp";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { Reveal } from "../fx/Reveal";
 
@@ -22,7 +22,7 @@ const Word = ({
 	progress: MotionValue<number>;
 	range: [number, number];
 }) => {
-	const opacity = useTransform(progress, range, [0.18, 1]);
+	const opacity = useTransform(progress, range, [0.35, 1]);
 	return (
 		<span className="relative mr-[0.25em] inline-block">
 			<motion.span style={{ opacity }}>{children}</motion.span>
@@ -32,7 +32,7 @@ const Word = ({
 
 /** "Who's behind this" — puts a face, a voice and a track record right after the hero. */
 const AboutIntro = () => {
-	const { t } = useLanguage();
+	const { t, localizedPath } = useLanguage();
 	const intro = t.home.intro;
 	const prefersReducedMotion = useReducedMotion();
 	const manifestoRef = useRef<HTMLParagraphElement>(null);
@@ -68,9 +68,12 @@ const AboutIntro = () => {
 						>
 							<div className="aspect-[4/5] overflow-hidden">
 								<img
-									src={profilePhoto}
+									src={profilePhotoLarge}
 									alt="Jonh Wili"
+									width={640}
+									height={620}
 									loading="lazy"
+									decoding="async"
 									className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-[1.03] group-hover:grayscale-0"
 								/>
 							</div>
@@ -138,7 +141,10 @@ const AboutIntro = () => {
 						</dl>
 
 						<Reveal delay={0.1}>
-							<Link to="/about" className="btn-ghost group mt-8">
+							<Link
+								to={localizedPath("/about")}
+								className="btn-ghost group mt-8"
+							>
 								{intro.more}{" "}
 								<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
 							</Link>

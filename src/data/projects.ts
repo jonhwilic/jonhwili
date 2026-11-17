@@ -1,9 +1,15 @@
-import balletGif from "@/assets/ballet-da-cidade.gif";
-import totalpassBlogGif from "@/assets/blog-totalpass.gif";
-import kardiahGif from "@/assets/kardiah.gif";
-import totalpassMapGif from "@/assets/mapa-totalpass.gif";
-import portelaGif from "@/assets/portela-filmes.gif";
-import totalpassInstitutionalGif from "@/assets/totalpass-institucional.gif";
+import balletVideo from "@/assets/projects/ballet-da-cidade.mp4";
+import balletPoster from "@/assets/projects/ballet-da-cidade.webp";
+import totalpassBlogVideo from "@/assets/projects/blog-totalpass.mp4";
+import totalpassBlogPoster from "@/assets/projects/blog-totalpass.webp";
+import kardiahVideo from "@/assets/projects/kardiah.mp4";
+import kardiahPoster from "@/assets/projects/kardiah.webp";
+import totalpassMapVideo from "@/assets/projects/mapa-totalpass.mp4";
+import totalpassMapPoster from "@/assets/projects/mapa-totalpass.webp";
+import portelaVideo from "@/assets/projects/portela-filmes.mp4";
+import portelaPoster from "@/assets/projects/portela-filmes.webp";
+import totalpassInstitutionalVideo from "@/assets/projects/totalpass-institucional.mp4";
+import totalpassInstitutionalPoster from "@/assets/projects/totalpass-institucional.webp";
 
 export type ProjectKey =
 	| "institutionalTotalpass"
@@ -13,44 +19,60 @@ export type ProjectKey =
 	| "kardiah"
 	| "portelaFilmes";
 
-export const projects: {
+export type Project = {
 	id: string;
-	gif: string;
+	/** Screen recording (H.264 MP4, converted from the original GIFs: ~92 MB → ~4.4 MB). */
+	video: string;
+	/** First frame shown before the video plays (and instead of it with reduced motion). */
+	poster: string;
 	titleKey: ProjectKey;
 	url: string | null;
 	featured?: boolean;
-}[] = [
+};
+
+export const projects: Project[] = [
 	{
 		id: "institutional-totalpass",
-		gif: totalpassInstitutionalGif,
+		video: totalpassInstitutionalVideo,
+		poster: totalpassInstitutionalPoster,
 		titleKey: "institutionalTotalpass",
 		url: "https://totalpass.com/br/",
 		featured: true,
 	},
 	{
 		id: "map-totalpass",
-		gif: totalpassMapGif,
+		video: totalpassMapVideo,
+		poster: totalpassMapPoster,
 		titleKey: "mapTotalpass",
 		url: "https://totalpass.com/br/mapa/",
 		featured: true,
 	},
 	{
 		id: "blog-totalpass",
-		gif: totalpassBlogGif,
+		video: totalpassBlogVideo,
+		poster: totalpassBlogPoster,
 		titleKey: "blogTotalpass",
 		url: "https://totalpass.com/br/blog/",
 	},
 	{
 		id: "ballet-da-cidade",
-		gif: balletGif,
+		video: balletVideo,
+		poster: balletPoster,
 		titleKey: "balletDaCidade",
 		url: null,
 		featured: true,
 	},
-	{ id: "kardiah", gif: kardiahGif, titleKey: "kardiah", url: null },
+	{
+		id: "kardiah",
+		video: kardiahVideo,
+		poster: kardiahPoster,
+		titleKey: "kardiah",
+		url: null,
+	},
 	{
 		id: "portela-filmes",
-		gif: portelaGif,
+		video: portelaVideo,
+		poster: portelaPoster,
 		titleKey: "portelaFilmes",
 		url: null,
 	},

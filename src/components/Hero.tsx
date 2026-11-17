@@ -8,8 +8,9 @@ import { ArrowRight, ArrowUpRight, Download } from "lucide-react";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import curriculumPdf from "@/assets/archieve/curriculum_jonh.pdf";
-import profilePhoto from "@/assets/foto_rosto.jpg";
+import profilePhotoSmall from "@/assets/foto_rosto-128.webp";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { trackCtaClick, trackCvDownload } from "@/lib/analytics";
 import Aurora from "./fx/Aurora";
 import InkBackground from "./fx/InkBackground";
 import Magnetic from "./fx/Magnetic";
@@ -19,7 +20,7 @@ import RotatingWord from "./fx/RotatingWord";
 const easeOutExpo = [0.22, 1, 0.36, 1] as const;
 
 const Hero = () => {
-	const { t } = useLanguage();
+	const { t, localizedPath } = useLanguage();
 	const heroCopy = t.home.hero;
 	const prefersReducedMotion = useReducedMotion();
 	const sectionRef = useRef<HTMLElement>(null);
@@ -44,6 +45,17 @@ const Hero = () => {
 			: {
 					initial: { opacity: 0, y: 18 },
 					animate: { opacity: 1, y: 0 },
+					transition: { duration: 0.8, delay, ease: easeOutExpo },
+				};
+
+	// The subtitle is the LCP element: it must be visible from the first paint,
+	// so it only slides (transform) instead of fading in from opacity 0.
+	const slideUp = (delay: number) =>
+		prefersReducedMotion
+			? {}
+			: {
+					initial: { y: 18 },
+					animate: { y: 0 },
 					transition: { duration: 0.8, delay, ease: easeOutExpo },
 				};
 
@@ -79,7 +91,7 @@ const Hero = () => {
 					}}
 				>
 					<img
-						src={profilePhoto}
+						src={profilePhotoSmall}
 						alt="Jonh Wili"
 						width={28}
 						height={28}
@@ -94,26 +106,36 @@ const Hero = () => {
 				</motion.div>
 
 				<h1 className="max-w-[16ch] font-heading text-[clamp(2.75rem,8vw,7.25rem)] font-semibold leading-[0.95] tracking-[-0.035em]">
-					<SplitWords
-						text={heroCopy.line1}
-						animateOnMount
-						delay={0.15}
-						className="block"
-					/>
-					<span className="block">
-						<SplitWords text={heroCopy.line2} animateOnMount delay={0.3} />{" "}
-						<motion.span {...fadeUp(0.45)} className="inline-block">
-							<RotatingWord
-								words={heroCopy.words}
-								className="accent-serif"
-								wordClassName="text-aura pr-[0.1em]"
-							/>
-						</motion.span>
+					{/* Crawlers, screen readers and AI agents get one complete, stable sentence */}
+					<span className="sr-only">{heroCopy.srHeadline}</span>
+					<span aria-hidden="true">
+						<SplitWords
+							text={heroCopy.line1}
+							animateOnMount
+							withAccessibleText={false}
+							delay={0.15}
+							className="block"
+						/>
+						<span className="block">
+							<SplitWords
+								text={heroCopy.line2}
+								animateOnMount
+								withAccessibleText={false}
+								delay={0.3}
+							/>{" "}
+							<motion.span {...fadeUp(0.45)} className="inline-block">
+								<RotatingWord
+									words={heroCopy.words}
+									className="accent-serif"
+									wordClassName="text-aura pr-[0.1em]"
+								/>
+							</motion.span>
+						</span>
 					</span>
 				</h1>
 
 				<motion.p
-					{...fadeUp(0.6)}
+					{...slideUp(0.1)}
 					className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
 				>
 					{heroCopy.sub}
@@ -124,7 +146,11 @@ const Hero = () => {
 					className="mt-10 flex flex-wrap items-center gap-3"
 				>
 					<Magnetic>
-						<Link to="/contact" className="btn-signal group">
+						<Link
+							to={localizedPath("/contact")}
+							onClick={() => trackCtaClick("start_project", "hero")}
+							className="btn-signal group"
+						>
 							{heroCopy.ctaProject}
 							<ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
 						</Link>
@@ -133,13 +159,15 @@ const Hero = () => {
 						<a
 							href={curriculumPdf}
 							download="curriculum_jonh.pdf"
+							onClick={() => trackCvDownload("hero")}
 							className="btn-ghost"
 						>
 							<Download className="h-4 w-4" /> {heroCopy.ctaCV}
 						</a>
 					</Magnetic>
 					<Link
-						to="/projects"
+						to={localizedPath("/projects")}
+						onClick={() => trackCtaClick("view_work", "hero")}
 						className="group ml-1 inline-flex items-center gap-2 px-2 py-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
 					>
 						{heroCopy.ctaWork}

@@ -24,13 +24,12 @@ const SCALE_STEP = 0.04;
 
 /** The stacking effect needs room; on small screens cards simply flow. */
 const useIsDesktop = () => {
-	const [isDesktop, setIsDesktop] = useState(
-		() =>
-			typeof window !== "undefined" && window.matchMedia(DESKTOP_QUERY).matches,
-	);
+	// starts false on the server and on the first client render (same markup → clean hydration)
+	const [isDesktop, setIsDesktop] = useState(false);
 	useEffect(() => {
 		const mediaQuery = window.matchMedia(DESKTOP_QUERY);
 		const handleChange = () => setIsDesktop(mediaQuery.matches);
+		handleChange();
 		mediaQuery.addEventListener("change", handleChange);
 		return () => mediaQuery.removeEventListener("change", handleChange);
 	}, []);
@@ -141,15 +140,15 @@ const ProjectCard = ({
 					>
 						{/* while open, the frame "lives" in the detail view — keep a placeholder so the layout doesn't jump */}
 						{isOpenInDetail ? (
-							<div className="aspect-[16/10] w-full rounded-2xl" />
+							<div className="aspect-video w-full rounded-2xl" />
 						) : (
 							<BrowserFrame
 								id={project.id}
-								src={project.gif}
+								video={project.video}
+								poster={project.poster}
 								alt={projectCopy.title}
 								url={project.url}
 								className="transition-transform duration-700 group-hover:-rotate-1 group-hover:scale-[1.015]"
-								eager={position === 0}
 							/>
 						)}
 					</button>

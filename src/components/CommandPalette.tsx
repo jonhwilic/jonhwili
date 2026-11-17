@@ -1,5 +1,4 @@
 import { Folder, Home, Mail, User } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
 	Command,
@@ -12,10 +11,15 @@ import {
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useLanguage } from "@/i18n/LanguageContext";
 
-const CommandPalette = () => {
-	const [open, setOpen] = useState(false);
+type CommandPaletteProps = {
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+};
+
+/** Loaded on demand (⌘K / Ctrl+K) by CommandPaletteLauncher, so it stays out of the initial bundle. */
+const CommandPalette = ({ open, onOpenChange }: CommandPaletteProps) => {
 	const navigate = useNavigate();
-	const { t } = useLanguage();
+	const { t, localizedPath } = useLanguage();
 
 	const pages = [
 		{ name: t.nav.home, path: "/", icon: Home },
@@ -24,25 +28,13 @@ const CommandPalette = () => {
 		{ name: t.nav.contact, path: "/contact", icon: Mail },
 	];
 
-	const handleKeyDown = useCallback((event: KeyboardEvent) => {
-		if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-			event.preventDefault();
-			setOpen((wasOpen) => !wasOpen);
-		}
-	}, []);
-
-	useEffect(() => {
-		document.addEventListener("keydown", handleKeyDown);
-		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [handleKeyDown]);
-
 	const goTo = (path: string) => {
-		navigate(path);
-		setOpen(false);
+		navigate(localizedPath(path));
+		onOpenChange(false);
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="p-0 overflow-hidden border-border/50 bg-popover/95 backdrop-blur-xl max-w-lg">
 				<Command className="bg-transparent">
 					<CommandInput

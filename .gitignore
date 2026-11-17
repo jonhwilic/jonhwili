@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# pre-render build step (scripts/prerender.mjs)
+dist-server

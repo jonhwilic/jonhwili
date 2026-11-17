@@ -1,18 +1,21 @@
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { ArrowUpRight, Layers, List } from "lucide-react";
-import { useCallback } from "react";
+import { lazy, Suspense, useCallback } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Reveal, SplitWords } from "@/components/fx/Reveal";
 import IndexView from "@/components/projects/IndexView";
-import ProjectDetail from "@/components/projects/ProjectDetail";
 import StackView from "@/components/projects/StackView";
 import { projects } from "@/data/projects";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { track } from "@/lib/analytics";
+
+/** The detail view only downloads when a project is opened. */
+const ProjectDetail = lazy(() => import("@/components/projects/ProjectDetail"));
 
 type View = "stack" | "index";
 
 const Projects = () => {
-	const { t } = useLanguage();
+	const { t, localizedPath } = useLanguage();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const activeView: View =
 		searchParams.get("view") === "index" ? "index" : "stack";
@@ -41,7 +44,10 @@ const Projects = () => {
 		[setSearchParams],
 	);
 	const openProject = useCallback(
-		(projectId: string) => updateSearchParams({ p: projectId }),
+		(projectId: string) => {
+			track("select_content", { content_type: "project", item_id: projectId });
+			updateSearchParams({ p: projectId });
+		},
 		[updateSearchParams],
 	);
 	const closeProject = useCallback(
@@ -168,7 +174,10 @@ const Projects = () => {
 						<p className="max-w-xl font-heading text-2xl font-semibold tracking-tight sm:text-4xl">
 							{t.projects.ctaTitle}
 						</p>
-						<Link to="/contact" className="btn-signal group shrink-0">
+						<Link
+							to={localizedPath("/contact")}
+							className="btn-signal group shrink-0"
+						>
 							{t.projects.cta}
 							<ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
 						</Link>
@@ -178,12 +187,13 @@ const Projects = () => {
 
 			<AnimatePresence>
 				{openProjectId && (
-					<ProjectDetail
-						key="detail"
-						projectId={openProjectId}
-						onClose={closeProject}
-						onNavigate={openProject}
-					/>
+					<Suspense key="detail" fallback={null}>
+						<ProjectDetail
+							projectId={openProjectId}
+							onClose={closeProject}
+							onNavigate={openProject}
+						/>
+					</Suspense>
 				)}
 			</AnimatePresence>
 		</LayoutGroup>

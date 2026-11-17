@@ -21,6 +21,8 @@ export const translations = {
 				line1: "Websites and systems",
 				line2: "that",
 				words: ["load fast.", "convert.", "scale.", "prove results."],
+				srHeadline:
+					"Websites and systems that load fast, convert, scale and prove results.",
 				sub: "I'm Jonh Wili — a full-stack developer with 7+ years of front-end depth and MarTech built in. I build websites and web systems that marketing can measure and engineering can trust.",
 				ctaProject: "Start a project",
 				ctaCV: "Download CV",
@@ -110,8 +112,21 @@ export const translations = {
 				all: "All projects",
 				visit: "Visit site",
 			},
+			testimonials: {
+				eyebrow: "03 — What people say",
+				title: "In the words of people",
+				titleAccent: "who worked with me.",
+				intro:
+					"Recommendations left on my LinkedIn by managers and teammates, unedited.",
+				translatedNote: "Translated from Portuguese",
+				viewOnLinkedIn: "See it on LinkedIn",
+				previous: "Previous recommendation",
+				next: "Next recommendation",
+				dragHint: "Drag the card or use the arrows",
+				carouselLabel: "Recommendations",
+			},
 			paths: {
-				eyebrow: "03 — Work with me",
+				eyebrow: "04 — Work with me",
 				title: "Two ways to",
 				titleAccent: "work together.",
 				hire: {
@@ -439,6 +454,18 @@ export const translations = {
 			sentDesc: "Thanks for reaching out. I'll get back to you soon.",
 		},
 		// Command Palette
+		consent: {
+			label: "Analytics consent",
+			text: "I use Google Analytics to understand which pages help visitors. No ads, no data sold. Accept?",
+			accept: "Accept",
+			decline: "No, thanks",
+		},
+		notFound: {
+			title: "This page doesn't exist.",
+			text: "The link may be old or mistyped.",
+			home: "Back to home",
+			projects: "See projects",
+		},
 		command: {
 			searchPlaceholder: "Search pages & projects...",
 			noResults: "No results found.",
@@ -486,6 +513,8 @@ export const translations = {
 					"escalam.",
 					"provam resultado.",
 				],
+				srHeadline:
+					"Sites e sistemas que carregam rápido, convertem, escalam e provam resultado.",
 				sub: "Sou Jonh Wili — dev full-stack com 7+ anos de profundidade em front-end e MarTech no DNA. Construo sites e sistemas web que o marketing consegue medir e a engenharia consegue confiar.",
 				ctaProject: "Começar um projeto",
 				ctaCV: "Baixar CV",
@@ -574,8 +603,21 @@ export const translations = {
 				all: "Todos os projetos",
 				visit: "Visitar site",
 			},
+			testimonials: {
+				eyebrow: "03 — Quem trabalhou comigo",
+				title: "Nas palavras de quem",
+				titleAccent: "trabalhou comigo.",
+				intro:
+					"Recomendações deixadas no meu LinkedIn por gestores e colegas de time, sem edição.",
+				translatedNote: "Traduzido do português",
+				viewOnLinkedIn: "Ver no LinkedIn",
+				previous: "Recomendação anterior",
+				next: "Próxima recomendação",
+				dragHint: "Arraste o card ou use as setas",
+				carouselLabel: "Recomendações",
+			},
 			paths: {
-				eyebrow: "03 — Trabalhe comigo",
+				eyebrow: "04 — Trabalhe comigo",
 				title: "Duas formas de",
 				titleAccent: "trabalharmos juntos.",
 				hire: {
@@ -905,6 +947,18 @@ export const translations = {
 			sentDesc: "Obrigado pelo contato. Responderei em breve.",
 		},
 		// Command Palette
+		consent: {
+			label: "Consentimento de métricas",
+			text: "Uso o Google Analytics para entender quais páginas ajudam quem visita. Sem anúncios e sem venda de dados. Aceita?",
+			accept: "Aceitar",
+			decline: "Não, obrigado",
+		},
+		notFound: {
+			title: "Esta página não existe.",
+			text: "O link pode estar antigo ou com algum erro de digitação.",
+			home: "Voltar ao início",
+			projects: "Ver projetos",
+		},
 		command: {
 			searchPlaceholder: "Buscar páginas e projetos...",
 			noResults: "Nenhum resultado encontrado.",

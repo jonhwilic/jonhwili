@@ -3,6 +3,7 @@ import { Github, Linkedin, Mail, Send } from "lucide-react";
 import { type FormEvent, useState } from "react";
 import { social } from "@/data/social";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { trackLead } from "@/lib/analytics";
 
 const Contact = () => {
 	const prefersReducedMotion = useReducedMotion();
@@ -28,6 +29,7 @@ const Contact = () => {
 		const text = encodeURIComponent(
 			`*Olá, eu vim do seu site!*\n\n*Nome:* ${name}\n*Email:* ${email}\n*Mensagem:* ${message}`,
 		);
+		trackLead("form", "contact_page");
 		window.open(`https://wa.me/${social.whatsapp}?text=${text}`, "_blank");
 		setSubmitted(true);
 	};
@@ -154,6 +156,7 @@ const Contact = () => {
 				>
 					<a
 						href={`mailto:${social.email}`}
+						onClick={() => trackLead("email", "contact_page")}
 						className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
 					>
 						<Mail className="w-4 h-4" /> {social.email}

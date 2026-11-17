@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import curriculumPdf from "@/assets/archieve/curriculum_jonh.pdf";
 import { social } from "@/data/social";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { trackCtaClick, trackCvDownload } from "@/lib/analytics";
 import Magnetic from "../fx/Magnetic";
 import { Reveal, SplitWords } from "../fx/Reveal";
 import SpotlightCard from "../fx/SpotlightCard";
 
 /** Two audiences, two doors — the portfolio's equivalent of the reference's "Planos". */
 const WorkTogether = () => {
-	const { t } = useLanguage();
+	const { t, localizedPath } = useLanguage();
 	const workPaths = t.home.paths;
 
 	return (
@@ -54,6 +55,7 @@ const WorkTogether = () => {
 									<a
 										href={curriculumPdf}
 										download="curriculum_jonh.pdf"
+										onClick={() => trackCvDownload("work_together")}
 										className="btn-ghost"
 									>
 										<Download className="h-4 w-4" /> {workPaths.hire.cta}
@@ -108,13 +110,19 @@ const WorkTogether = () => {
 								</ul>
 								<div className="mt-auto flex flex-wrap gap-3 pt-12">
 									<Magnetic>
-										<Link to="/contact" className="btn-signal group">
+										<Link
+											to={localizedPath("/contact")}
+											onClick={() =>
+												trackCtaClick("start_project", "work_together")
+											}
+											className="btn-signal group"
+										>
 											{workPaths.build.cta}
 											<ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
 										</Link>
 									</Magnetic>
 									<Link
-										to="/projects"
+										to={localizedPath("/projects")}
 										className="inline-flex items-center gap-2 px-3 py-3 text-sm text-foreground/75 hover:text-foreground"
 									>
 										{workPaths.build.secondary}

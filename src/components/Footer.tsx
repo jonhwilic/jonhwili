@@ -2,9 +2,10 @@ import { ArrowUp, Github, Linkedin, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import { social } from "@/data/social";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { trackLead } from "@/lib/analytics";
 
 const Footer = () => {
-	const { t } = useLanguage();
+	const { t, localizedPath } = useLanguage();
 	const navLinks = [
 		{ label: t.nav.home, path: "/" },
 		{ label: t.nav.projects, path: "/projects" },
@@ -25,7 +26,10 @@ const Footer = () => {
 			<div className="container">
 				<div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
 					<div>
-						<Link to="/" className="inline-flex items-center gap-2">
+						<Link
+							to={localizedPath("/")}
+							className="inline-flex items-center gap-2"
+						>
 							<img
 								src="/favicon.svg"
 								alt=""
@@ -51,7 +55,7 @@ const Footer = () => {
 							{navLinks.map((navLink) => (
 								<li key={navLink.path}>
 									<Link
-										to={navLink.path}
+										to={localizedPath(navLink.path)}
 										className="text-sm text-foreground/80 hover:text-foreground"
 									>
 										{navLink.label}
@@ -72,6 +76,10 @@ const Footer = () => {
 										href={href}
 										target={href.startsWith("http") ? "_blank" : undefined}
 										rel="noopener noreferrer"
+										onClick={() => {
+											if (href.startsWith("mailto:"))
+												trackLead("email", "footer");
+										}}
 										className="inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground"
 									>
 										<Icon className="h-3.5 w-3.5" /> {label}

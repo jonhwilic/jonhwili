@@ -11,7 +11,7 @@ import {
 	Rocket,
 	Users,
 } from "lucide-react";
-import profilePhoto from "@/assets/foto_rosto.jpg";
+import profilePhoto from "@/assets/foto_rosto-128.webp";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const howIWorkIcons = [Users, GitBranch, FileText];
