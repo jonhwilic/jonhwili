@@ -21,7 +21,7 @@ export const translations = {
         line1: "Websites and systems",
         line2: "that",
         words: ["load fast.", "convert.", "scale.", "prove results."],
-        sub: "I'm Jonh Wili — a full-stack engineer with 7+ years of front-end depth and MarTech built in. I build websites and web systems that marketing can measure and engineering can trust.",
+        sub: "I'm Jonh Wili — a full-stack developer with 7+ years of front-end depth and MarTech built in. I build websites and web systems that marketing can measure and engineering can trust.",
         ctaProject: "Start a project",
         ctaCV: "Download CV",
         ctaWork: "View work",
@@ -31,12 +31,12 @@ export const translations = {
       intro: {
         eyebrow: "00 — Who's behind this",
         hello: "Hi, I'm Jonh.",
-        manifesto: "For 7+ years I've been turning ideas into websites and web systems people actually use — from TotalPass's corporate website to a real estate ERP built end to end. I work where engineering meets marketing: I write the code, and I make sure you can measure what it delivers.",
-        role: "Full-stack engineer · Front-end & MarTech",
+        manifesto: "For 7+ years I've been turning ideas into websites and web systems people actually use — from a corporate website to an ERP built end to end. I work where engineering meets marketing: I write the code, and I make sure you can measure what it delivers.",
+        role: "Full-stack developer · Front-end & MarTech",
         location: "Espírito Santo, Brazil · Remote",
         facts: [
-          { label: "Now", value: "Front-end developer at TotalPass", detail: "since 2022" },
-          { label: "Recently", value: "Led the front-end of a real estate ERP", detail: "4U Homes · 2025" },
+          { label: "Now", value: "Full-stack developer", detail: "TotalPass · São Paulo · since 2022" },
+          { label: "Recently", value: "I worked on the development of an ERP system for the real estate sector.", detail: "4U Homes · Orlando/FL · 2025" },
           { label: "Background", value: "B.Sc. Information Systems + Postgrad in Web Apps", detail: "UCL · FACPRISMA" },
           { label: "I help with", value: "Websites, landing pages and web systems", detail: "for teams and businesses" },
         ],
@@ -50,7 +50,7 @@ export const translations = {
       ],
       services: {
         eyebrow: "01 — What I do",
-        title: "One engineer,",
+        title: "One developer,",
         titleAccent: "the whole web stack.",
         intro: "Every web product has to answer three questions: is it fast, will it hold up, and can you prove it worked? I build for all three.",
         items: [
@@ -86,7 +86,7 @@ export const translations = {
         hire: {
           tag: "Full-time · CLT · Contract",
           title: "Join your team",
-          desc: "An engineer who owns features end to end — from the Figma file to the production metrics.",
+          desc: "A developer who owns features end to end — from the Figma file to the production metrics.",
           bullets: [
             "Front-end lead with real full-stack range",
             "Remote-first since 2022, async-friendly",
@@ -122,7 +122,7 @@ export const translations = {
     // Hero
     hero: {
       available: "Available for projects",
-      headline: "Front-End Engineer",
+      headline: "Full-Stack Developer",
       headlineAccent: "Web Systems Development",
       subheadline: "Next.js + TypeScript + Tailwind — performance, accessibility, and scalable UI systems.",
       viewProjects: "View Projects",
@@ -182,7 +182,7 @@ export const translations = {
         },
         {
           year: "Jan 2025 – Nov 2025",
-          title: "Front-End Engineer — Real Estate ERP · 4U Homes",
+          title: "Full-Stack Developer — Real Estate ERP · 4U Homes",
           description: "Led front-end development of a full end-to-end real estate construction ERP. The system managed the entire lifecycle — from land acquisition assessment to construction phases, property sales, investor management, and automated financial viability reports.",
           type: "professional",
           icon: "rocket",
@@ -243,14 +243,14 @@ export const translations = {
       chip: "About",
       greeting: "Hi, I'm",
       bio: [
-         "I'm a full-stack engineer with 7+ years of front-end experience, building web applications that perform, scale, and are accessible to everyone. I specialize in MarTech, building front-ends that marketing teams can measure, optimize, and experiment with.",
+         "I'm a full-stack developer with 7+ years of front-end experience, building web applications that perform, scale, and are accessible to everyone. I specialize in MarTech, building front-ends that marketing teams can measure, optimize, and experiment with.",
          "I work with React and Next.js daily, using TypeScript 100% of the time. I care deeply about Core Web Vitals, semantic HTML, keyboard navigation, and building UI systems that teams can trust over time.",
-         "Beyond front-end, I bring versatility: Python automations, ERP experience with TOTVS and Sankhya, Java development, and SQL data manipulation. I believe great front-end engineers understand the full stack.",
+         "Beyond front-end, I bring versatility: Python automations, ERP experience with TOTVS and Sankhya, Java development, and SQL data manipulation. I believe great front-end developers understand the full stack.",
        ],
        experience: "Experience",
        timeline: [
          { year: "2018–2022", title: "Front-End Developer", desc: "Built e-commerce, institutional, and ERP web systems using React + TypeScript." },
-         { year: "2022–Present", title: "Front-End Engineer — MarTech Specialist", desc: "Delivering MarTech platforms, analytics dashboards, and performance-oriented web applications." },
+         { year: "2022–Present", title: "Full-Stack Developer — MarTech Focus", desc: "Delivering MarTech platforms, analytics dashboards, and performance-oriented web applications." },
        ],
        howIWork: "How I Work",
        howIWorkCards: [
@@ -363,7 +363,7 @@ export const translations = {
     },
     // Badge
     badge: {
-      role: "Full-Stack Engineer • Front-End & MarTech",
+      role: "Full-Stack Developer • Front-End & MarTech",
     },
   },
 
@@ -398,13 +398,13 @@ export const translations = {
       intro: {
         eyebrow: "00 — Quem está por trás",
         hello: "Oi, eu sou o Jonh.",
-        manifesto: "Há mais de 7 anos transformo ideias em sites e sistemas web que as pessoas realmente usam — de um site institucional à um ERP construído de ponta a ponta. Eu trabalho onde a engenharia encontra o marketing: escrevo o código e garanto que você consiga medir o que ele entrega.",
+        manifesto: "Há mais de 7 anos transformo ideias em sites e sistemas web que as pessoas realmente usam — de um site institucional a um ERP construído de ponta a ponta. Eu trabalho onde a engenharia encontra o marketing: escrevo o código e garanto que você consiga medir o que ele entrega.",
         role: "Dev full-stack · Front-end & MarTech",
         location: "Espírito Santo, Brasil · Remoto",
         facts: [
-          { label: "Hoje", value: "Desenvolvedor front-end na TotalPass", detail: "desde 2022" },
-          { label: "Recentemente", value: "Liderei o front-end de um ERP imobiliário", detail: "4U Homes · 2025" },
-          { label: "Formação", value: "Sistemas de Informação + Pós em Aplicações Web", detail: "UCL · FACPRISMA" },
+          { label: "Hoje", value: "Desenvolvedor full stack", detail: "TotalPass · São Paulo ·desde 2022" },
+          { label: "Recentemente", value: "Atuei no desenvolvimento de um ERP imobiliário", detail: "4U Homes · EUA · 2025" },
+          { label: "Formação", value: "Sistemas de Informação + Pós em Sistemas Web", detail: "UCL · FACPRISMA" },
           { label: "Posso ajudar com", value: "Sites, landing pages e sistemas web", detail: "para times e empresas" },
         ],
         more: "Conheça minha trajetória",

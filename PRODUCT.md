@@ -16,7 +16,7 @@ jonhwili.dev is Jonh Wili's personal portfolio — a professional presence that 
 
 ## Positioning
 
-**Full-stack engineer with deep MarTech and front-end expertise.** The differentiated claim is the combination: 7+ years of front-end delivery, an active specialization in MarTech (analytics, pixels, A/B testing, tracking-ready architectures), and enough back-end breadth (NestJS, Python, SQL, PHP, ERP systems) to own complete web solutions. A neighboring generalist cannot truthfully claim that specific track record.
+**Full-stack developer with deep MarTech and front-end expertise.** The differentiated claim is the combination: 7+ years of front-end delivery, an active specialization in MarTech (analytics, pixels, A/B testing, tracking-ready architectures), and enough back-end breadth (NestJS, Python, SQL, PHP, ERP systems) to own complete web solutions. A neighboring generalist cannot truthfully claim that specific track record.
 
 ## Operating Context
 
@@ -37,6 +37,7 @@ jonhwili.dev is Jonh Wili's personal portfolio — a professional presence that 
 ## Brand Commitments
 
 - **Name:** "Jonh Wili" — this spelling is canonical.
+- **Title wording:** use "dev/developer" (dev full-stack, dev front-end; EN: full-stack/front-end developer), never "engineer/engenheiro".
 - **Domain:** jonhwili.dev
 - **Visual identity ("Signal", Nov 2026):** ink-navy canvas `#070A17`, indigo→violet atmosphere for backgrounds, signal lime `#C5F23D` reserved for actions and live states. Type: Bricolage Grotesque (headings), Instrument Serif italic (accent words), Geist / Geist Mono (body, labels). Floating pill header. Still open to iteration.
 

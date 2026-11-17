@@ -14,15 +14,15 @@ const RotatingWord = ({ words, interval = 2400, className = "", wordClassName = 
 
   return (
     <span className={`relative inline-flex ${className}`}>
-    <span className="relative inline-grid overflow-hidden align-bottom" aria-hidden="true">
+    <span className="relative -mb-[0.25em] inline-grid overflow-hidden align-bottom" aria-hidden="true">
       {/* invisible sizer keeps layout stable with the longest word */}
-      <span className="invisible col-start-1 row-start-1">
+      <span className="invisible col-start-1 row-start-1 pb-[0.25em]">
         {words.reduce((a, b) => (b.length > a.length ? b : a), "")}
       </span>
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
           key={words[i]}
-          className={`col-start-1 row-start-1 ${wordClassName}`}
+          className={`col-start-1 row-start-1 pb-[0.25em] ${wordClassName}`}
           initial={{ y: "100%", opacity: 0 }}
           animate={{ y: "0%", opacity: 1 }}
           exit={{ y: "-100%", opacity: 0 }}

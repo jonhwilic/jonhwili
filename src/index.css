@@ -126,6 +126,8 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    /* the gradient only paints inside the box: give descenders (g, p, j) room */
+    padding-bottom: 0.15em;
   }
 
   /* Legacy class names, restyled to the new identity */
