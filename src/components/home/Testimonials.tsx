@@ -165,7 +165,8 @@ const Testimonials = () => {
 		else if (wasThrownRight) showRelative(-1);
 	};
 
-	const handleDeckKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+	/** Arrow keys flip the deck from any of its controls (list items and arrows). */
+	const handleArrowKeys = (event: KeyboardEvent<HTMLButtonElement>) => {
 		if (event.key === "ArrowRight") showRelative(1);
 		if (event.key === "ArrowLeft") showRelative(-1);
 	};
@@ -203,6 +204,7 @@ const Testimonials = () => {
 									<li key={testimonial.id}>
 										<button
 											type="button"
+											onKeyDown={handleArrowKeys}
 											onClick={() => setActivePosition(position)}
 											aria-current={isActive ? "true" : undefined}
 											className={`relative flex w-full items-center gap-4 rounded-2xl px-4 py-3 text-left transition-colors ${isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
@@ -247,13 +249,10 @@ const Testimonials = () => {
 
 					{/* Card deck */}
 					<Reveal delay={0.1} className="min-w-0">
-						<div
-							role="region"
+						<section
 							aria-roledescription="carousel"
 							aria-label={copy.carouselLabel}
-							tabIndex={0}
-							onKeyDown={handleDeckKeyDown}
-							className="relative grid grid-cols-1 rounded-[1.75rem] pb-10 outline-none focus-visible:ring-2 focus-visible:ring-primary"
+							className="relative grid grid-cols-1 rounded-[1.75rem] pb-10"
 						>
 							<AnimatePresence initial={false}>
 								{testimonials.map((testimonial, position) => {
@@ -299,7 +298,7 @@ const Testimonials = () => {
 									);
 								})}
 							</AnimatePresence>
-						</div>
+						</section>
 
 						<div className="mt-4 flex items-center justify-between gap-4">
 							<div className="flex items-center gap-3">
@@ -325,6 +324,7 @@ const Testimonials = () => {
 								</span>
 								<button
 									type="button"
+									onKeyDown={handleArrowKeys}
 									onClick={() => showRelative(-1)}
 									className="btn-ghost h-11 px-4"
 									aria-label={copy.previous}
@@ -333,6 +333,7 @@ const Testimonials = () => {
 								</button>
 								<button
 									type="button"
+									onKeyDown={handleArrowKeys}
 									onClick={() => showRelative(1)}
 									className="btn-ghost h-11 px-4"
 									aria-label={copy.next}

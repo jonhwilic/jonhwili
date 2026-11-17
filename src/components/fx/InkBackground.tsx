@@ -116,6 +116,7 @@ const InkBackground = ({
 		if (!webgl) return;
 		const program = createProgram(webgl);
 		if (!program) return;
+		// biome-ignore lint/correctness/useHookAtTopLevel: WebGL API method, not a React hook
 		webgl.useProgram(program);
 
 		const vertexBuffer = webgl.createBuffer();
@@ -206,12 +207,11 @@ const InkBackground = ({
 		};
 	}, [prefersReducedMotion, resolution]);
 
+	// decorative: the wrapper hides it from assistive tech (aria-hidden on <canvas> itself is flagged)
 	return (
-		<canvas
-			ref={canvasRef}
-			aria-hidden="true"
-			className={`absolute inset-0 h-full w-full ${className}`}
-		/>
+		<div aria-hidden="true" className={`absolute inset-0 ${className}`}>
+			<canvas ref={canvasRef} className="h-full w-full" />
+		</div>
 	);
 };
 

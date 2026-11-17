@@ -25,7 +25,20 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"preset": "recommended",
+			"suspicious": {
+				"noUnknownAtRules": {
+					"level": "error",
+					"options": {
+						"ignore": [
+							"tailwind",
+							"apply",
+							"layer",
+							"config"
+						]
+					}
+				}
+			}
 		}
 	},
 	"javascript": {
