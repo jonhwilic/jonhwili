@@ -82,10 +82,10 @@ const ProjectDetail = ({
 					>
 						<BrowserFrame
 							id={project.id}
-							src={project.gif}
+							video={project.video}
+							poster={project.poster}
 							alt={projectCopy.title}
 							url={project.url}
-							eager
 						/>
 					</motion.div>
 

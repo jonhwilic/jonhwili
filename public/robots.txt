@@ -1,14 +1,5 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
+# Search engines and AI assistants (search + user-initiated fetches) are welcome.
 User-agent: *
 Allow: /
+
+Sitemap: https://www.jonhwili.dev/sitemap.xml

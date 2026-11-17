@@ -1,10 +1,6 @@
-import {
-	createContext,
-	type ReactNode,
-	useCallback,
-	useContext,
-	useState,
-} from "react";
+import { createContext, type ReactNode, useCallback, useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getLocaleFromPath, localizePath, stripLocale } from "./routing";
 import { type Locale, translations } from "./translations";
 
 type TranslationsType =
@@ -15,30 +11,36 @@ interface LanguageContextType {
 	locale: Locale;
 	t: TranslationsType;
 	toggleLocale: () => void;
+	/** Turns "/projects" into the URL of that page in the current language. */
+	localizedPath: (path: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
 	undefined,
 );
 
+/** The language comes from the URL (/pt/... = Portuguese), so every language is crawlable and server-renderable. */
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-	const [locale, setLocale] = useState<Locale>(() => {
-		const saved = localStorage.getItem("locale");
-		return (saved === "pt-BR" ? "pt-BR" : "en") as Locale;
-	});
+	const { pathname, search, hash } = useLocation();
+	const navigate = useNavigate();
+	const locale = getLocaleFromPath(pathname);
 
 	const toggleLocale = useCallback(() => {
-		setLocale((currentLocale) => {
-			const nextLocale = currentLocale === "en" ? "pt-BR" : "en";
-			localStorage.setItem("locale", nextLocale);
-			return nextLocale;
-		});
-	}, []);
+		const nextLocale: Locale = locale === "en" ? "pt-BR" : "en";
+		navigate(
+			localizePath(`${stripLocale(pathname)}${search}${hash}`, nextLocale),
+		);
+	}, [locale, navigate, pathname, search, hash]);
 
-	const t = translations[locale];
+	const localizedPath = useCallback(
+		(path: string) => localizePath(path, locale),
+		[locale],
+	);
 
 	return (
-		<LanguageContext.Provider value={{ locale, t, toggleLocale }}>
+		<LanguageContext.Provider
+			value={{ locale, t: translations[locale], toggleLocale, localizedPath }}
+		>
 			{children}
 		</LanguageContext.Provider>
 	);
@@ -46,8 +48,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
 const fallback: LanguageContextType = {
 	locale: "en",
-	t: translations["en"],
+	t: translations.en,
 	toggleLocale: () => {},
+	localizedPath: (path) => path,
 };
 
 export const useLanguage = () => {

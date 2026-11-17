@@ -215,6 +215,7 @@ const HangingBadge = () => {
 
 			{/* SVG cord connecting anchor to badge */}
 			<svg
+				aria-hidden="true"
 				className="absolute top-[10px] left-1/2 pointer-events-none"
 				style={{
 					transform: "translateX(-50%)",

@@ -1,7 +1,8 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-/** Cycles through words, inspired by KokonutUI "Dynamic Text". */
+/** Cycles through words, inspired by KokonutUI "Dynamic Text". Purely visual: give the
+ * surrounding heading an accessible sentence (see Hero's srHeadline). */
 const RotatingWord = ({
 	words,
 	interval = 2400,
@@ -55,7 +56,6 @@ const RotatingWord = ({
 					</motion.span>
 				</AnimatePresence>
 			</span>
-			<span className="sr-only">{words.join(", ")}</span>
 		</span>
 	);
 };

@@ -35,11 +35,14 @@ export const SplitWords = ({
 	className = "",
 	delay = 0,
 	animateOnMount = false,
+	withAccessibleText = true,
 }: {
 	text: string;
 	className?: string;
 	delay?: number;
 	animateOnMount?: boolean;
+	/** Set to false when the parent already provides the full sentence (e.g. the hero H1). */
+	withAccessibleText?: boolean;
 }) => {
 	const prefersReducedMotion = useReducedMotion();
 	if (prefersReducedMotion) return <span className={className}>{text}</span>;
@@ -55,33 +58,37 @@ export const SplitWords = ({
 		? { animate: "show" }
 		: { whileInView: "show", viewport: { once: true, margin: "-40px" } };
 
+	// The readable sentence is a sibling (not inside the gradient-clipped span, which would paint it);
+	// the animated per-word copy is hidden from assistive tech and AI agents.
 	return (
-		<motion.span
-			className={className}
-			initial="hidden"
-			{...trigger}
-			aria-label={text}
-		>
-			{words.map((entry) => (
-				<span
-					key={entry.id}
-					className="inline-block overflow-hidden pb-[0.12em] align-bottom"
-					aria-hidden="true"
-				>
-					<motion.span
-						className="inline-block"
-						variants={{ hidden: { y: "110%" }, show: { y: "0%" } }}
-						transition={{
-							duration: 0.8,
-							delay: entry.delay,
-							ease: easeOutExpo,
-						}}
+		<>
+			{withAccessibleText && <span className="sr-only">{text}</span>}
+			<motion.span
+				className={className}
+				initial="hidden"
+				{...trigger}
+				aria-hidden="true"
+			>
+				{words.map((entry) => (
+					<span
+						key={entry.id}
+						className="inline-block overflow-hidden pb-[0.12em] align-bottom"
 					>
-						{entry.word}
-						{entry.isLast ? "" : " "}
-					</motion.span>
-				</span>
-			))}
-		</motion.span>
+						<motion.span
+							className="inline-block"
+							variants={{ hidden: { y: "110%" }, show: { y: "0%" } }}
+							transition={{
+								duration: 0.8,
+								delay: entry.delay,
+								ease: easeOutExpo,
+							}}
+						>
+							{entry.word}
+							{entry.isLast ? "" : " "}
+						</motion.span>
+					</span>
+				))}
+			</motion.span>
+		</>
 	);
 };

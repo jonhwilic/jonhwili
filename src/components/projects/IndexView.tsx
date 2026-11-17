@@ -6,7 +6,7 @@ import {
 	useSpring,
 } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { type PointerEvent, useState } from "react";
+import { type PointerEvent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { projects } from "@/data/projects";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -24,6 +24,10 @@ const IndexView = ({ onOpen }: IndexViewProps) => {
 	const previewY = useSpring(useMotionValue(0), previewSpring);
 	const activeProject =
 		activePosition === null ? null : projects[activePosition];
+
+	// the cursor preview is portaled to <body>, which only exists in the browser
+	const [isMounted, setIsMounted] = useState(false);
+	useEffect(() => setIsMounted(true), []);
 
 	const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
 		if (event.pointerType !== "mouse") return;
@@ -80,10 +84,11 @@ const IndexView = ({ onOpen }: IndexViewProps) => {
 									</span>
 									{/* mobile: inline thumbnail */}
 									<img
-										src={project.gif}
+										src={project.poster}
 										alt=""
 										loading="lazy"
-										className="mt-4 aspect-[16/10] w-full rounded-xl border object-cover object-top md:hidden"
+										decoding="async"
+										className="mt-4 aspect-video w-full rounded-xl border object-cover object-top md:hidden"
 									/>
 								</div>
 								<span
@@ -99,57 +104,63 @@ const IndexView = ({ onOpen }: IndexViewProps) => {
 			</ul>
 
 			{/* Cursor-following preview (desktop only). Portaled so page transforms don't offset it. */}
-			{createPortal(
-				<motion.div
-					className="pointer-events-none fixed left-0 top-0 z-40 hidden md:block"
-					style={{
-						x: previewX,
-						y: previewY,
-						translateX: "-50%",
-						translateY: "-50%",
-					}}
-					aria-hidden="true"
-				>
-					<AnimatePresence>
-						{activeProject && (
-							<motion.div
-								key="preview"
-								initial={
-									prefersReducedMotion
-										? { opacity: 0 }
-										: { opacity: 0, scale: 0.6, rotate: -6 }
-								}
-								animate={{ opacity: 1, scale: 1, rotate: -3 }}
-								exit={
-									prefersReducedMotion
-										? { opacity: 0 }
-										: { opacity: 0, scale: 0.6, rotate: 4 }
-								}
-								transition={{ type: "spring", stiffness: 260, damping: 24 }}
-								className="relative h-[240px] w-[380px] overflow-hidden rounded-2xl border shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]"
-								style={{
-									borderColor: "hsl(var(--foreground) / 0.15)",
-									background: "hsl(var(--card))",
-								}}
-							>
-								<AnimatePresence initial={false}>
-									<motion.img
-										key={activeProject.id}
-										src={activeProject.gif}
-										alt=""
-										initial={{ clipPath: "inset(100% 0 0 0)" }}
-										animate={{ clipPath: "inset(0% 0 0 0)" }}
-										exit={{ opacity: 0 }}
-										transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-										className="absolute inset-0 h-full w-full object-cover object-top"
-									/>
-								</AnimatePresence>
-							</motion.div>
-						)}
-					</AnimatePresence>
-				</motion.div>,
-				document.body,
-			)}
+			{isMounted &&
+				createPortal(
+					<motion.div
+						className="pointer-events-none fixed left-0 top-0 z-40 hidden md:block"
+						style={{
+							x: previewX,
+							y: previewY,
+							translateX: "-50%",
+							translateY: "-50%",
+						}}
+						aria-hidden="true"
+					>
+						<AnimatePresence>
+							{activeProject && (
+								<motion.div
+									key="preview"
+									initial={
+										prefersReducedMotion
+											? { opacity: 0 }
+											: { opacity: 0, scale: 0.6, rotate: -6 }
+									}
+									animate={{ opacity: 1, scale: 1, rotate: -3 }}
+									exit={
+										prefersReducedMotion
+											? { opacity: 0 }
+											: { opacity: 0, scale: 0.6, rotate: 4 }
+									}
+									transition={{ type: "spring", stiffness: 260, damping: 24 }}
+									className="relative h-[214px] w-[380px] overflow-hidden rounded-2xl border shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]"
+									style={{
+										borderColor: "hsl(var(--foreground) / 0.15)",
+										background: "hsl(var(--card))",
+									}}
+								>
+									<AnimatePresence initial={false}>
+										<motion.video
+											key={activeProject.id}
+											src={activeProject.video}
+											poster={activeProject.poster}
+											autoPlay={!prefersReducedMotion}
+											muted
+											loop
+											playsInline
+											aria-hidden="true"
+											initial={{ clipPath: "inset(100% 0 0 0)" }}
+											animate={{ clipPath: "inset(0% 0 0 0)" }}
+											exit={{ opacity: 0 }}
+											transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+											className="absolute inset-0 h-full w-full object-cover object-top"
+										/>
+									</AnimatePresence>
+								</motion.div>
+							)}
+						</AnimatePresence>
+					</motion.div>,
+					document.body,
+				)}
 		</div>
 	);
 };

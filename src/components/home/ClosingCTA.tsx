@@ -2,13 +2,14 @@ import { ArrowUpRight, Mail, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { social } from "@/data/social";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { trackLead } from "@/lib/analytics";
 import Aurora from "../fx/Aurora";
 import FlowingPaths from "../fx/FlowingPaths";
 import Magnetic from "../fx/Magnetic";
 import { Reveal, SplitWords } from "../fx/Reveal";
 
 const ClosingCTA = () => {
-	const { t, locale } = useLanguage();
+	const { t, locale, localizedPath } = useLanguage();
 	const closing = t.home.closing;
 	const whatsappMessage = encodeURIComponent(
 		locale === "pt-BR"
@@ -44,13 +45,18 @@ const ClosingCTA = () => {
 					className="mt-12 flex flex-wrap items-center justify-center gap-3"
 				>
 					<Magnetic>
-						<a href={`mailto:${social.email}`} className="btn-signal group">
+						<a
+							href={`mailto:${social.email}`}
+							onClick={() => trackLead("email", "closing")}
+							className="btn-signal group"
+						>
 							<Mail className="h-4 w-4" /> {closing.email}
 						</a>
 					</Magnetic>
 					<Magnetic>
 						<a
 							href={`https://wa.me/${social.whatsapp}?text=${whatsappMessage}`}
+							onClick={() => trackLead("whatsapp", "closing")}
 							target="_blank"
 							rel="noopener noreferrer"
 							className="btn-ghost"
@@ -59,7 +65,7 @@ const ClosingCTA = () => {
 						</a>
 					</Magnetic>
 					<Link
-						to="/contact"
+						to={localizedPath("/contact")}
 						className="group inline-flex items-center gap-1.5 px-3 py-3 text-sm text-muted-foreground hover:text-foreground"
 					>
 						{closing.form}{" "}

@@ -9,6 +9,7 @@ import { ArrowUpRight, Command } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { localizePath, stripLocale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 /**
@@ -19,7 +20,13 @@ import { cn } from "@/lib/utils";
  */
 const Navbar = () => {
 	const location = useLocation();
-	const { locale, t, toggleLocale } = useLanguage();
+	const { locale, t, localizedPath } = useLanguage();
+	const otherLocale = locale === "en" ? "pt-BR" : "en";
+	// a real link (not a button) so crawlers discover the other language version
+	const alternateLanguagePath = localizePath(
+		`${stripLocale(location.pathname)}${location.search}`,
+		otherLocale,
+	);
 	const prefersReducedMotion = useReducedMotion();
 	const { scrollY } = useScroll();
 
@@ -55,8 +62,9 @@ const Navbar = () => {
 		{ label: t.nav.about, path: "/about" },
 		{ label: t.nav.contact, path: "/contact" },
 	];
+	const currentPagePath = stripLocale(location.pathname);
 	const isActive = (path: string) =>
-		location.pathname === path || location.pathname.startsWith(`${path}/`);
+		currentPagePath === path || currentPagePath.startsWith(`${path}/`);
 
 	const openPalette = () =>
 		document.dispatchEvent(
@@ -99,7 +107,7 @@ const Navbar = () => {
 					>
 						{/* Wordmark */}
 						<Link
-							to="/"
+							to={localizedPath("/")}
 							className="group flex items-center gap-2 rounded-full py-1 pl-1 pr-3"
 							aria-label="Jonh Wili — home"
 						>
@@ -123,7 +131,7 @@ const Navbar = () => {
 							{navItems.map((navItem) => (
 								<li key={navItem.path} className="relative">
 									<Link
-										to={navItem.path}
+										to={localizedPath(navItem.path)}
 										onMouseEnter={() => setHoveredPath(navItem.path)}
 										onFocus={() => setHoveredPath(navItem.path)}
 										onBlur={() => setHoveredPath(null)}
@@ -158,9 +166,9 @@ const Navbar = () => {
 
 						{/* Right cluster */}
 						<div className="flex items-center gap-1.5">
-							<button
-								type="button"
-								onClick={toggleLocale}
+							<Link
+								to={alternateLanguagePath}
+								hrefLang={otherLocale}
 								className="hidden h-8 items-center rounded-full px-2.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
 								aria-label={
 									locale === "en" ? "Mudar para português" : "Switch to English"
@@ -173,7 +181,7 @@ const Navbar = () => {
 								<span className={locale === "pt-BR" ? "text-foreground" : ""}>
 									pt
 								</span>
-							</button>
+							</Link>
 
 							<button
 								type="button"
@@ -186,7 +194,7 @@ const Navbar = () => {
 							</button>
 
 							<Link
-								to="/contact"
+								to={localizedPath("/contact")}
 								className="group hidden h-9 items-center gap-1.5 rounded-full bg-primary pl-4 pr-3 font-heading text-[13px] font-semibold text-primary-foreground transition-shadow hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.7)] md:inline-flex"
 							>
 								{t.nav.cta}
@@ -248,7 +256,7 @@ const Navbar = () => {
 												transition={{ delay: 0.04 * position }}
 											>
 												<Link
-													to={mobileItem.path}
+													to={localizedPath(mobileItem.path)}
 													onClick={closeMenu}
 													className="flex items-center justify-between rounded-2xl px-4 py-3 font-heading text-2xl font-semibold tracking-tight hover:bg-foreground/5"
 												>
@@ -266,19 +274,20 @@ const Navbar = () => {
 									style={{ borderColor: "hsl(var(--foreground) / 0.08)" }}
 								>
 									<Link
-										to="/contact"
+										to={localizedPath("/contact")}
 										onClick={closeMenu}
 										className="btn-signal flex-1 justify-center"
 									>
 										{t.nav.cta} <ArrowUpRight className="h-4 w-4" />
 									</Link>
-									<button
-										type="button"
-										onClick={toggleLocale}
+									<Link
+										to={alternateLanguagePath}
+										hrefLang={otherLocale}
+										onClick={closeMenu}
 										className="btn-ghost px-4 font-mono text-xs uppercase"
 									>
 										{locale === "en" ? "pt" : "en"}
-									</button>
+									</Link>
 								</div>
 							</motion.div>
 						)}

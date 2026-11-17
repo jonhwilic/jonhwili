@@ -1,20 +1,21 @@
 import { motion } from "framer-motion";
+import ProjectMedia from "./ProjectMedia";
 
 /** Browser-chrome frame around a project capture. Shares `layoutId` with the detail view. */
 const BrowserFrame = ({
 	id,
-	src,
+	video,
+	poster,
 	alt,
 	url,
 	className = "",
-	eager = false,
 }: {
 	id: string;
-	src: string;
+	video: string;
+	poster: string;
 	alt: string;
 	url: string | null;
 	className?: string;
-	eager?: boolean;
 }) => (
 	<motion.div
 		layoutId={`media-${id}`}
@@ -36,12 +37,11 @@ const BrowserFrame = ({
 				{url ? url.replace(/^https?:\/\//, "").replace(/\/$/, "") : "preview"}
 			</span>
 		</div>
-		<img
-			src={src}
-			alt={alt}
-			loading={eager ? "eager" : "lazy"}
-			decoding="async"
-			className="block aspect-[16/10] w-full object-cover object-top"
+		<ProjectMedia
+			video={video}
+			poster={poster}
+			label={alt}
+			className="block aspect-video w-full object-cover object-top"
 		/>
 	</motion.div>
 );

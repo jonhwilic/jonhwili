@@ -3,7 +3,9 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { projects } from "@/data/projects";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { track } from "@/lib/analytics";
 import { Reveal, SplitWords } from "../fx/Reveal";
+import ProjectMedia from "../projects/ProjectMedia";
 
 const cardClassName = "group relative block overflow-hidden rounded-3xl border";
 
@@ -16,24 +18,39 @@ const ProjectLink = ({
 	projectId: string;
 	url: string | null;
 	children: ReactNode;
-}) =>
-	url ? (
-		<a
-			href={url}
-			target="_blank"
-			rel="noopener noreferrer"
+}) => {
+	const { localizedPath } = useLanguage();
+	if (url) {
+		return (
+			<a
+				href={url}
+				target="_blank"
+				rel="noopener noreferrer"
+				onClick={() =>
+					track("select_content", {
+						content_type: "project",
+						item_id: projectId,
+						location: "home",
+					})
+				}
+				className={cardClassName}
+			>
+				{children}
+			</a>
+		);
+	}
+	return (
+		<Link
+			to={localizedPath(`/projects?p=${projectId}`)}
 			className={cardClassName}
 		>
 			{children}
-		</a>
-	) : (
-		<Link to={`/projects?p=${projectId}`} className={cardClassName}>
-			{children}
 		</Link>
 	);
+};
 
 const FeaturedWork = () => {
-	const { t } = useLanguage();
+	const { t, localizedPath } = useLanguage();
 	const workCopy = t.home.work;
 	const featuredProjects = projects.filter((project) => project.featured);
 
@@ -55,7 +72,7 @@ const FeaturedWork = () => {
 						</h2>
 					</div>
 					<Reveal delay={0.1}>
-						<Link to="/projects" className="btn-ghost group">
+						<Link to={localizedPath("/projects")} className="btn-ghost group">
 							{workCopy.all}{" "}
 							<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
 						</Link>
@@ -78,11 +95,10 @@ const FeaturedWork = () => {
 										className={`relative overflow-hidden ${isHighlight ? "aspect-[4/5] sm:aspect-[16/10] md:aspect-[21/9]" : "aspect-[4/5] sm:aspect-[4/3]"}`}
 										style={{ background: "hsl(var(--card))" }}
 									>
-										<img
-											src={project.gif}
-											alt={projectCopy.title}
-											loading="lazy"
-											decoding="async"
+										<ProjectMedia
+											video={project.video}
+											poster={project.poster}
+											label={projectCopy.title}
 											className="h-full w-full object-cover object-top transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
 										/>
 										<div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
