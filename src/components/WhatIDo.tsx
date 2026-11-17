@@ -1,47 +1,52 @@
-import { motion, useReducedMotion } from "framer-motion";
-import { Gauge, Layers, BarChart3 } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { Reveal, SplitWords } from "./fx/Reveal";
+import SpotlightCard from "./fx/SpotlightCard";
+import EventFeed from "./fx/EventFeed";
 
-const icons = [Gauge, Layers, BarChart3];
-
+/** Services — three disciplines, like the "O Estúdio" block of the reference. */
 const WhatIDo = () => {
-  const prefersReduced = useReducedMotion();
   const { t } = useLanguage();
+  const s = t.home.services;
 
   return (
-    <section className="relative py-24">
-      <div className="container">
-        <div className="text-center mb-14">
-          <span className="tag-chip text-xs mb-4 inline-flex">{t.whatIDo.chip}</span>
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight mt-3">
-            {t.whatIDo.title} <span className="neon-text">{t.whatIDo.titleAccent}</span>
+    <section id="services" className="relative py-24 sm:py-32">
+      <div className="container grid grid-cols-1 gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+        <div className="lg:sticky lg:top-32 lg:self-start">
+          <Reveal><span className="eyebrow">{s.eyebrow}</span></Reveal>
+          <h2 className="mt-6 font-heading text-4xl font-semibold leading-[1.02] sm:text-6xl">
+            <SplitWords text={s.title} className="block" />
+            <SplitWords text={s.titleAccent} delay={0.15} className="accent-serif text-aura block" />
           </h2>
+          <Reveal delay={0.2}>
+            <p className="mt-6 max-w-md text-muted-foreground sm:text-lg">{s.intro}</p>
+          </Reveal>
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-6">
-          {t.whatIDo.cards.map((card, i) => {
-            const Icon = icons[i];
-            return (
-              <motion.div
-                key={card.title}
-                className="glass-card p-6 sm:p-8 text-center group"
-                initial={prefersReduced ? {} : { opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: i * 0.12 }}
-              >
-                <div
-                  className="w-12 h-12 mx-auto mb-5 rounded-xl flex items-center justify-center transition-all duration-500 group-hover:scale-110"
-                  style={{ background: "hsl(var(--primary) / 0.1)", border: "1px solid hsl(var(--primary) / 0.2)" }}
-                >
-                  <Icon className="w-5 h-5 text-primary" />
+        <ol className="flex flex-col gap-4">
+          {s.items.map((item, i) => (
+            <Reveal key={item.title} delay={i * 0.08}>
+              <SpotlightCard as="li" className="p-6 sm:p-8">
+                <div className="flex items-start gap-5 sm:gap-8">
+                  <span className="pt-1 font-mono text-xs text-muted-foreground">0{i + 1}</span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">{item.title}</h3>
+                    <p className="mt-3 max-w-xl leading-relaxed text-muted-foreground">{item.desc}</p>
+                    <ul className="mt-5 flex flex-wrap gap-2">
+                      {item.keywords.map((k) => (
+                        <li key={k} className="tag-chip">{k}</li>
+                      ))}
+                    </ul>
+                    {i === 1 && (
+                      <div className="mt-6 max-w-sm">
+                        <EventFeed label={s.eventsLabel} />
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <h3 className="font-heading font-semibold text-lg mb-3">{card.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{card.description}</p>
-              </motion.div>
-            );
-          })}
-        </div>
+              </SpotlightCard>
+            </Reveal>
+          ))}
+        </ol>
       </div>
     </section>
   );

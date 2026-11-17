@@ -1,144 +1,214 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Globe, ChevronDown, Check } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
+import { ArrowUpRight, Command } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/i18n/LanguageContext";
 
+/**
+ * Floating, minimal header.
+ * - Detached pill centred at the top, glass surface.
+ * - Compacts after the first scroll, hides while scrolling down, returns on scroll up.
+ * - Hover highlight slides between links (shared layout), in the spirit of KokonutUI nav pieces.
+ */
 const Navbar = () => {
   const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
   const { locale, t, toggleLocale } = useLanguage();
+  const reduce = useReducedMotion();
+  const { scrollY } = useScroll();
 
-  const navItems = [
-    { label: t.nav.home, path: "/" },
-    { label: t.nav.about, path: "/about" },
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    setScrolled(y > 24);
+    setHidden(!open && y > 480 && y > prev + 4);
+    if (y < prev - 4) setHidden(false);
+  });
+
+  useEffect(() => setOpen(false), [location.pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const items = [
     { label: t.nav.projects, path: "/projects" },
+    { label: t.nav.about, path: "/about" },
     { label: t.nav.contact, path: "/contact" },
   ];
+  const isActive = (p: string) => location.pathname === p || location.pathname.startsWith(p + "/");
+
+  const openPalette = () => document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40">
-      <div
-        className="border-b border-border/30"
-        style={{ background: "hsl(var(--background) / 0.8)", backdropFilter: "blur(16px)" }}
+    <>
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:text-primary-foreground"
       >
-        <nav className="container flex items-center justify-between h-16">
-          <Link to="/" className="font-heading font-bold text-lg tracking-tight">
-            <span className="neon-text">jonh</span>
-            <span className="text-foreground">wili</span>
-            <span className="text-muted-foreground text-sm">.dev</span>
-          </Link>
+        {t.nav.skip}
+      </a>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const active = location.pathname === item.path || (item.path !== "/" && location.pathname.startsWith(item.path));
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className="relative px-4 py-2 text-sm font-heading font-medium transition-colors hover:text-primary"
-                  style={{ color: active ? "hsl(var(--primary))" : undefined }}
-                >
-                  {item.label}
-                  {active && (
+      <motion.header
+        className="fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 sm:pt-4"
+        initial={reduce ? false : { y: -80, opacity: 0 }}
+        animate={{ y: hidden ? -100 : 0, opacity: hidden ? 0 : 1 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="relative w-full max-w-[44rem]">
+          <nav
+            aria-label="Main"
+            className={cn(
+              "flex items-center justify-between gap-2 rounded-full border pl-2 pr-2 transition-all duration-500",
+              scrolled || open ? "h-12 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.6)]" : "h-14",
+            )}
+            style={{
+              borderColor: "hsl(var(--foreground) / 0.1)",
+              background: scrolled || open ? "hsl(var(--background) / 0.72)" : "hsl(var(--background) / 0.35)",
+              backdropFilter: "blur(18px) saturate(140%)",
+              WebkitBackdropFilter: "blur(18px) saturate(140%)",
+            }}
+          >
+            {/* Wordmark */}
+            <Link to="/" className="group flex items-center gap-2 rounded-full py-1 pl-1 pr-3" aria-label="Jonh Wili — home">
+              <img src="/favicon.svg" alt="" width={32} height={32} className="h-8 w-8 transition-transform duration-500 group-hover:rotate-[-8deg]" />
+              <span className="hidden font-heading text-sm font-semibold tracking-tight sm:inline">
+                jonhwili<span className="text-muted-foreground">.dev</span>
+              </span>
+            </Link>
+
+            {/* Desktop links */}
+            <ul className="hidden items-center md:flex" onMouseLeave={() => setHovered(null)}>
+              {items.map((item) => (
+                <li key={item.path} className="relative">
+                  <Link
+                    to={item.path}
+                    onMouseEnter={() => setHovered(item.path)}
+                    aria-current={isActive(item.path) ? "page" : undefined}
+                    className={cn(
+                      "relative z-10 block rounded-full px-4 py-1.5 text-sm transition-colors",
+                      isActive(item.path) ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {item.label}
+                    {isActive(item.path) && (
+                      <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-primary" />
+                    )}
+                  </Link>
+                  {hovered === item.path && (
                     <motion.span
-                      layoutId="nav-underline"
-                      className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full"
-                      style={{ background: "hsl(var(--primary))" }}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      layoutId="nav-hover"
+                      className="absolute inset-0 rounded-full"
+                      style={{ background: "hsl(var(--foreground) / 0.07)" }}
+                      transition={{ type: "spring", stiffness: 450, damping: 35 }}
                     />
                   )}
-                </Link>
-              );
-            })}
-
-            {/* Language dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="ml-2 px-3 py-1.5 rounded-md border border-border/50 text-xs text-muted-foreground font-mono cursor-pointer hover:border-primary/30 hover:text-primary transition-colors flex items-center gap-1.5"
-                  aria-label="Change language"
-                >
-                  <Globe className="w-3.5 h-3.5" />
-                  {locale === "en" ? "EN" : "PT-BR"}
-                  <ChevronDown className="w-3 h-3" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-[140px] bg-background border-border">
-                <DropdownMenuItem
-                  onClick={() => { if (locale !== "en") toggleLocale(); }}
-                  className={cn("flex items-center gap-2 text-xs font-mono cursor-pointer", locale === "en" && "text-primary")}
-                >
-                  <span className="text-sm">🇺🇸</span> English
-                  {locale === "en" && <Check className="w-3 h-3 ml-auto text-primary" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => { if (locale !== "pt-BR") toggleLocale(); }}
-                  className={cn("flex items-center gap-2 text-xs font-mono cursor-pointer", locale === "pt-BR" && "text-primary")}
-                >
-                  <span className="text-sm">🇧🇷</span> Português (BR)
-                  {locale === "pt-BR" && <Check className="w-3 h-3 ml-auto text-primary" />}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <div className="ml-2 px-3 py-1 rounded-md border border-border/50 text-xs text-muted-foreground font-mono cursor-pointer hover:border-primary/30 transition-colors"
-              onClick={() => document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }))}
-            >
-              ⌘K
-            </div>
-          </div>
-
-          {/* Mobile toggle */}
-          <button
-            className="md:hidden p-2 text-foreground"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </nav>
-      </div>
-
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="md:hidden border-b border-border/30"
-            style={{ background: "hsl(var(--background) / 0.95)", backdropFilter: "blur(16px)" }}
-          >
-            <div className="container py-4 flex flex-col gap-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setMobileOpen(false)}
-                  className="px-4 py-3 text-sm font-heading font-medium rounded-lg hover:bg-muted transition-colors"
-                  style={{
-                    color: location.pathname === item.path ? "hsl(var(--primary))" : undefined,
-                  }}
-                >
-                  {item.label}
-                </Link>
+                </li>
               ))}
+            </ul>
+
+            {/* Right cluster */}
+            <div className="flex items-center gap-1.5">
               <button
-                onClick={() => { toggleLocale(); setMobileOpen(false); }}
-                className="px-4 py-3 text-sm font-heading font-medium rounded-lg hover:bg-muted transition-colors text-left flex items-center gap-2 text-muted-foreground"
+                onClick={toggleLocale}
+                className="hidden h-8 items-center rounded-full px-2.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+                aria-label={locale === "en" ? "Mudar para português" : "Switch to English"}
               >
-                <Globe className="w-4 h-4" />
-                {locale === "en" ? "Português (BR)" : "English"}
+                <span className={locale === "en" ? "text-foreground" : ""}>en</span>
+                <span className="mx-1 opacity-40">/</span>
+                <span className={locale === "pt-BR" ? "text-foreground" : ""}>pt</span>
+              </button>
+
+              <button
+                onClick={openPalette}
+                className="hidden h-8 w-8 place-items-center rounded-full text-muted-foreground transition-colors hover:text-foreground lg:grid"
+                aria-label="Open command palette (⌘K)"
+                title="⌘K"
+              >
+                <Command className="h-3.5 w-3.5" />
+              </button>
+
+              <Link
+                to="/contact"
+                className="group hidden h-9 items-center gap-1.5 rounded-full bg-primary pl-4 pr-3 font-heading text-[13px] font-semibold text-primary-foreground transition-shadow hover:shadow-[0_8px_30px_-8px_hsl(var(--primary)/0.7)] md:inline-flex"
+              >
+                {t.nav.cta}
+                <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </Link>
+
+              {/* Mobile toggle */}
+              <button
+                onClick={() => setOpen((o) => !o)}
+                className="inline-flex h-9 items-center gap-2 rounded-full border px-4 text-[13px] font-medium md:hidden"
+                style={{ borderColor: "hsl(var(--foreground) / 0.14)" }}
+                aria-expanded={open}
+                aria-controls="mobile-menu"
+              >
+                <span className="relative block h-2.5 w-3.5" aria-hidden="true">
+                  <span className={cn("absolute left-0 h-px w-full bg-current transition-all duration-300", open ? "top-1/2 rotate-45" : "top-0")} />
+                  <span className={cn("absolute left-0 h-px w-full bg-current transition-all duration-300", open ? "top-1/2 -rotate-45" : "bottom-0")} />
+                </span>
+                {open ? t.nav.close : t.nav.menu}
               </button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+          </nav>
+
+          {/* Mobile sheet */}
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                id="mobile-menu"
+                initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-x-0 top-full mt-2 origin-top rounded-3xl border p-3 md:hidden"
+                style={{
+                  borderColor: "hsl(var(--foreground) / 0.1)",
+                  background: "hsl(var(--background) / 0.92)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                }}
+              >
+                <ul className="flex flex-col">
+                  {[{ label: t.nav.home, path: "/" }, ...items].map((item, i) => (
+                    <motion.li
+                      key={item.path}
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.04 * i }}
+                    >
+                      <Link
+                        to={item.path}
+                        className="flex items-center justify-between rounded-2xl px-4 py-3 font-heading text-2xl font-semibold tracking-tight hover:bg-foreground/5"
+                      >
+                        {item.label}
+                        <span className="font-mono text-xs text-muted-foreground">0{i + 1}</span>
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+                <div className="mt-2 flex items-center gap-2 border-t pt-3" style={{ borderColor: "hsl(var(--foreground) / 0.08)" }}>
+                  <Link to="/contact" className="btn-signal flex-1 justify-center">
+                    {t.nav.cta} <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                  <button onClick={toggleLocale} className="btn-ghost px-4 font-mono text-xs uppercase">
+                    {locale === "en" ? "pt" : "en"}
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.header>
+    </>
   );
 };
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Home, Clock, User, Mail, Folder } from "lucide-react";
+import { Home, User, Mail, Folder } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const CommandPalette = () => {
@@ -13,7 +13,6 @@ const CommandPalette = () => {
   const pages = [
     { name: t.nav.home, path: "/", icon: Home },
     { name: t.nav.about, path: "/about", icon: User },
-    { name: t.nav.timeline, path: "/timeline", icon: Clock },
     { name: t.nav.projects, path: "/projects", icon: Folder },
     { name: t.nav.contact, path: "/contact", icon: Mail },
   ];

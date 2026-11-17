@@ -19,9 +19,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Space Grotesk"', "system-ui", "sans-serif"],
-        body: ['"DM Sans"', "system-ui", "sans-serif"],
-        mono: ['"JetBrains Mono"', "monospace"],
+        heading: ['"Bricolage Grotesque"', "system-ui", "sans-serif"],
+        body: ['"Geist"', "system-ui", "sans-serif"],
+        mono: ['"Geist Mono"', "ui-monospace", "monospace"],
+        serif: ['"Instrument Serif"', "ui-serif", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",

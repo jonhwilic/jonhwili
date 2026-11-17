@@ -22,7 +22,7 @@ const Contact = () => {
     const text = encodeURIComponent(
       `*Olá, eu vim do seu site!*\n\n*Nome:* ${name}\n*Email:* ${email}\n*Mensagem:* ${message}`,
     );
-    window.open(`https://wa.me/5527996302851?text=${text}`, "_blank");
+    window.open(`https://wa.me/${social.whatsapp}?text=${text}`, "_blank");
     setSubmitted(true);
   };
 
@@ -36,7 +36,7 @@ const Contact = () => {
         };
 
   return (
-    <section className="py-24">
+    <section className="pb-24 pt-36">
       <div className="container max-w-xl">
         <motion.div {...fadeUp(0)}>
           <span className="tag-chip text-xs mb-4 inline-flex">{t.contact.chip}</span>

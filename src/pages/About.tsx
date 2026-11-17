@@ -39,7 +39,7 @@ const About = () => {
   const entries = t.timeline.entries as unknown as TimelineEntry[];
 
   return (
-    <section className="py-24">
+    <section className="pb-24 pt-36">
       <div className="container max-w-4xl">
         <motion.div {...fadeUp(0)}>
           <span className="tag-chip text-xs mb-4 inline-flex">{t.about.chip}</span>
