@@ -30,12 +30,7 @@
 				"noUnknownAtRules": {
 					"level": "error",
 					"options": {
-						"ignore": [
-							"tailwind",
-							"apply",
-							"layer",
-							"config"
-						]
+						"ignore": ["tailwind", "apply", "layer", "config"]
 					}
 				}
 			}
