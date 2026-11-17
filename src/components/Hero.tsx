@@ -1,77 +1,187 @@
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, Download, Mail } from "lucide-react";
+import {
+	motion,
+	useReducedMotion,
+	useScroll,
+	useTransform,
+} from "framer-motion";
+import { ArrowRight, ArrowUpRight, Download } from "lucide-react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
-import HangingBadge from "./HangingBadge";
-import { useLanguage } from "@/i18n/LanguageContext";
 import curriculumPdf from "@/assets/archieve/curriculum_jonh.pdf";
+import profilePhoto from "@/assets/foto_rosto.jpg";
+import { useLanguage } from "@/i18n/LanguageContext";
+import Aurora from "./fx/Aurora";
+import InkBackground from "./fx/InkBackground";
+import Magnetic from "./fx/Magnetic";
+import { SplitWords } from "./fx/Reveal";
+import RotatingWord from "./fx/RotatingWord";
+
+const easeOutExpo = [0.22, 1, 0.36, 1] as const;
 
 const Hero = () => {
-  const prefersReduced = useReducedMotion();
-  const { t } = useLanguage();
-  const fadeUp = (delay: number) =>
-    prefersReduced
-      ? {}
-      : {
-        initial: { opacity: 0, y: 24 },
-        animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.6, delay, ease: "easeOut" as const },
-      };
+	const { t } = useLanguage();
+	const heroCopy = t.home.hero;
+	const prefersReducedMotion = useReducedMotion();
+	const sectionRef = useRef<HTMLElement>(null);
+	const { scrollYProgress } = useScroll({
+		target: sectionRef,
+		offset: ["start start", "end start"],
+	});
+	const backgroundOffset = useTransform(
+		scrollYProgress,
+		[0, 1],
+		["0%", prefersReducedMotion ? "0%" : "18%"],
+	);
+	const contentOpacity = useTransform(
+		scrollYProgress,
+		[0, 0.7],
+		[1, prefersReducedMotion ? 1 : 0],
+	);
 
-  return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      <div className="absolute inset-0 tech-grid opacity-40" />
-      <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full blur-[120px] opacity-20" style={{ background: "hsl(var(--primary))" }} />
-      <div className="absolute bottom-1/4 -right-32 w-80 h-80 rounded-full blur-[120px] opacity-15" style={{ background: "hsl(var(--accent))" }} />
+	const fadeUp = (delay: number) =>
+		prefersReducedMotion
+			? {}
+			: {
+					initial: { opacity: 0, y: 18 },
+					animate: { opacity: 1, y: 0 },
+					transition: { duration: 0.8, delay, ease: easeOutExpo },
+				};
 
-      <div className="container relative z-10 py-20 lg:py-32">
-        <div className="grid lg:grid-cols-[1fr_auto] gap-12 items-center">
-          <div className="max-w-2xl">
-            <motion.div {...fadeUp(0.1)}>
-              <span className="tag-chip mb-6 inline-flex">
-                <span className="w-2 h-2 rounded-full mr-2 animate-glow-pulse" style={{ background: "hsl(var(--primary))" }} />
-                {t.hero.available}
-              </span>
-            </motion.div>
+	return (
+		<section
+			ref={sectionRef}
+			className="relative isolate flex min-h-[100svh] flex-col overflow-hidden"
+		>
+			{/* Background layers */}
+			<motion.div
+				className="absolute inset-0 -z-10"
+				style={{ y: backgroundOffset }}
+			>
+				{/* Aurora is the fallback if WebGL is unavailable; the ink canvas paints over it */}
+				<Aurora />
+				<InkBackground />
+				<div className="absolute inset-0 tech-grid opacity-60 [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]" />
+				<div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
+			</motion.div>
 
-            <motion.h1 {...fadeUp(0.2)} className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
-              {t.hero.headline}
-              <br />
-              <span className="neon-text">{t.hero.headlineAccent}</span>
-            </motion.h1>
+			<motion.div
+				style={{ opacity: contentOpacity }}
+				className="container flex flex-1 flex-col justify-center pb-10 pt-32 sm:pt-40"
+			>
+				{/* Status chip with face — trust before anything else */}
+				<motion.div
+					{...fadeUp(0.05)}
+					className="mb-8 inline-flex w-fit items-center gap-3 rounded-full border py-1 pl-1 pr-4 text-xs sm:text-sm"
+					style={{
+						borderColor: "hsl(var(--foreground) / 0.12)",
+						background: "hsl(var(--background) / 0.4)",
+						backdropFilter: "blur(10px)",
+					}}
+				>
+					<img
+						src={profilePhoto}
+						alt="Jonh Wili"
+						width={28}
+						height={28}
+						className="h-7 w-7 rounded-full object-cover"
+					/>
+					<span className="whitespace-nowrap font-heading font-semibold text-foreground">
+						Jonh Wili
+					</span>
+					<span className="h-3 w-px bg-foreground/20" aria-hidden="true" />
+					<span className="live-dot" aria-hidden="true" />
+					<span className="text-foreground/80">{heroCopy.status}</span>
+				</motion.div>
 
-            <motion.p {...fadeUp(0.35)} className="text-lg sm:text-xl text-muted-foreground max-w-xl mb-8 leading-relaxed">
-              {t.hero.subheadline}
-            </motion.p>
+				<h1 className="max-w-[16ch] font-heading text-[clamp(2.75rem,8vw,7.25rem)] font-semibold leading-[0.95] tracking-[-0.035em]">
+					<SplitWords
+						text={heroCopy.line1}
+						animateOnMount
+						delay={0.15}
+						className="block"
+					/>
+					<span className="block">
+						<SplitWords text={heroCopy.line2} animateOnMount delay={0.3} />{" "}
+						<motion.span {...fadeUp(0.45)} className="inline-block">
+							<RotatingWord
+								words={heroCopy.words}
+								className="accent-serif"
+								wordClassName="text-aura pr-[0.1em]"
+							/>
+						</motion.span>
+					</span>
+				</h1>
 
-            <motion.div {...fadeUp(0.5)} className="flex flex-wrap gap-3 mb-12">
-              <Link to="/projects" className="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg font-heading font-semibold text-sm bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
-                {t.hero.viewProjects} <ArrowRight className="w-4 h-4" />
-              </Link>
-              <a href={curriculumPdf} download="curriculum_jonh.pdf" className="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg font-heading font-semibold text-sm border border-border bg-secondary/50 text-secondary-foreground hover:bg-secondary transition-colors">
-                <Download className="w-4 h-4" /> {t.hero.downloadCV}
-              </a>
-              <Link to="/contact" className="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-lg font-heading font-semibold text-sm border border-border/50 text-muted-foreground hover:text-foreground hover:border-border transition-colors">
-                <Mail className="w-4 h-4" /> {t.hero.contact}
-              </Link>
-            </motion.div>
+				<motion.p
+					{...fadeUp(0.6)}
+					className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
+				>
+					{heroCopy.sub}
+				</motion.p>
 
-            <motion.div {...fadeUp(0.65)} className="flex flex-wrap gap-x-6 gap-y-2">
-              {t.hero.credibility.map((item) => (
-                <span key={item} className="text-xs font-mono text-muted-foreground flex items-center gap-2">
-                  <span className="w-1 h-1 rounded-full bg-primary/60" />
-                  {item}
-                </span>
-              ))}
-            </motion.div>
-          </div>
+				<motion.div
+					{...fadeUp(0.75)}
+					className="mt-10 flex flex-wrap items-center gap-3"
+				>
+					<Magnetic>
+						<Link to="/contact" className="btn-signal group">
+							{heroCopy.ctaProject}
+							<ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+						</Link>
+					</Magnetic>
+					<Magnetic>
+						<a
+							href={curriculumPdf}
+							download="curriculum_jonh.pdf"
+							className="btn-ghost"
+						>
+							<Download className="h-4 w-4" /> {heroCopy.ctaCV}
+						</a>
+					</Magnetic>
+					<Link
+						to="/projects"
+						className="group ml-1 inline-flex items-center gap-2 px-2 py-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+					>
+						{heroCopy.ctaWork}
+						<ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+					</Link>
+				</motion.div>
+			</motion.div>
 
-          <motion.div {...fadeUp(0.4)} style={{ zIndex: 1 }}>
-            <HangingBadge />
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
+			{/* Bottom meta rail */}
+			<motion.div {...fadeUp(0.9)} className="container relative pb-8">
+				<div
+					className="flex items-end justify-between gap-6 border-t pt-5"
+					style={{ borderColor: "hsl(var(--foreground) / 0.1)" }}
+				>
+					<ul className="flex flex-wrap gap-x-6 gap-y-1 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+						{heroCopy.meta.map((metaItem) => (
+							<li key={metaItem}>{metaItem}</li>
+						))}
+					</ul>
+					<div
+						className="hidden items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground sm:flex"
+						aria-hidden="true"
+					>
+						{heroCopy.scroll}
+						<span className="relative block h-8 w-px overflow-hidden bg-foreground/15">
+							<motion.span
+								className="absolute inset-x-0 top-0 h-1/2 bg-primary"
+								animate={
+									prefersReducedMotion ? undefined : { y: ["-100%", "200%"] }
+								}
+								transition={{
+									duration: 1.8,
+									repeat: Number.POSITIVE_INFINITY,
+									ease: "easeInOut",
+								}}
+							/>
+						</span>
+					</div>
+				</div>
+			</motion.div>
+		</section>
+	);
 };
 
 export default Hero;
