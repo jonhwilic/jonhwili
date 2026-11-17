@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
-const ease = [0.22, 1, 0.36, 1] as const;
+const easeOutExpo = [0.22, 1, 0.36, 1] as const;
 
 /** Fade/slide-in when scrolled into view. */
 export const Reveal = ({
@@ -15,14 +15,14 @@ export const Reveal = ({
 	className?: string;
 	y?: number;
 }) => {
-	const reduce = useReducedMotion();
+	const prefersReducedMotion = useReducedMotion();
 	return (
 		<motion.div
 			className={className}
-			initial={reduce ? false : { opacity: 0, y }}
+			initial={prefersReducedMotion ? false : { opacity: 0, y }}
 			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true, margin: "-60px" }}
-			transition={{ duration: 0.7, delay, ease }}
+			transition={{ duration: 0.7, delay, ease: easeOutExpo }}
 		>
 			{children}
 		</motion.div>
@@ -41,12 +41,20 @@ export const SplitWords = ({
 	delay?: number;
 	animateOnMount?: boolean;
 }) => {
-	const reduce = useReducedMotion();
-	const words = text.split(" ");
-	if (reduce) return <span className={className}>{text}</span>;
+	const prefersReducedMotion = useReducedMotion();
+	if (prefersReducedMotion) return <span className={className}>{text}</span>;
+
+	// words can repeat inside a sentence, so the position is part of their stable id
+	const words = text.split(" ").map((word, position, allWords) => ({
+		id: `${position}-${word}`,
+		word,
+		delay: delay + position * 0.06,
+		isLast: position === allWords.length - 1,
+	}));
 	const trigger = animateOnMount
 		? { animate: "show" }
 		: { whileInView: "show", viewport: { once: true, margin: "-40px" } };
+
 	return (
 		<motion.span
 			className={className}
@@ -54,19 +62,23 @@ export const SplitWords = ({
 			{...trigger}
 			aria-label={text}
 		>
-			{words.map((w, i) => (
+			{words.map((entry) => (
 				<span
-					key={i}
+					key={entry.id}
 					className="inline-block overflow-hidden pb-[0.12em] align-bottom"
 					aria-hidden="true"
 				>
 					<motion.span
 						className="inline-block"
 						variants={{ hidden: { y: "110%" }, show: { y: "0%" } }}
-						transition={{ duration: 0.8, delay: delay + i * 0.06, ease }}
+						transition={{
+							duration: 0.8,
+							delay: entry.delay,
+							ease: easeOutExpo,
+						}}
 					>
-						{w}
-						{i < words.length - 1 ? " " : ""}
+						{entry.word}
+						{entry.isLast ? "" : " "}
 					</motion.span>
 				</span>
 			))}

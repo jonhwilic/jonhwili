@@ -1,10 +1,10 @@
 import Hero from "@/components/Hero";
 import AboutIntro from "@/components/home/AboutIntro";
-import TechStack from "@/components/TechStack";
-import WhatIDo from "@/components/WhatIDo";
+import ClosingCTA from "@/components/home/ClosingCTA";
 import FeaturedWork from "@/components/home/FeaturedWork";
 import WorkTogether from "@/components/home/WorkTogether";
-import ClosingCTA from "@/components/home/ClosingCTA";
+import TechStack from "@/components/TechStack";
+import WhatIDo from "@/components/WhatIDo";
 
 const Index = () => (
 	<>

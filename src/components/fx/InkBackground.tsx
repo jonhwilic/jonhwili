@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 /**
  * "Ink in water" WebGL background, inspired by KokonutUI's Ink Background.
@@ -9,166 +9,210 @@ import { useReducedMotion } from "framer-motion";
  * - prefers-reduced-motion: draws a single still frame.
  * - No WebGL: renders nothing, the parent's fallback layer shows through.
  */
-const FRAG = `
+const FRAGMENT_SHADER = `
 precision mediump float;
-uniform vec2 uRes;
+uniform vec2 uResolution;
 uniform float uTime;
-uniform vec2 uMouse;
+uniform vec2 uPointer;
 uniform float uStir;
 
-float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-float noise(vec2 p){
-  vec2 i = floor(p), f = fract(p);
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
-             mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+float hash(vec2 point){ return fract(sin(dot(point, vec2(127.1, 311.7))) * 43758.5453); }
+
+float valueNoise(vec2 point){
+  vec2 cell = floor(point);
+  vec2 cellOffset = fract(point);
+  vec2 blend = cellOffset * cellOffset * (3.0 - 2.0 * cellOffset);
+  return mix(mix(hash(cell), hash(cell + vec2(1.0, 0.0)), blend.x),
+             mix(hash(cell + vec2(0.0, 1.0)), hash(cell + vec2(1.0, 1.0)), blend.x), blend.y);
 }
-float fbm(vec2 p){
-  float v = 0.0, a = 0.5;
-  mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
-  for (int i = 0; i < 5; i++){ v += a * noise(p); p = m * p; a *= 0.5; }
-  return v;
+
+float fractalNoise(vec2 point){
+  float total = 0.0;
+  float amplitude = 0.5;
+  mat2 octaveRotation = mat2(1.6, 1.2, -1.2, 1.6);
+  for (int octave = 0; octave < 5; octave++){
+    total += amplitude * valueNoise(point);
+    point = octaveRotation * point;
+    amplitude *= 0.5;
+  }
+  return total;
 }
 
 void main(){
-  vec2 uv = gl_FragCoord.xy / uRes;
-  vec2 p = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y;
-  float t = uTime * 0.05;
+  vec2 screenUv = gl_FragCoord.xy / uResolution;
+  vec2 point = (gl_FragCoord.xy - 0.5 * uResolution) / uResolution.y;
+  float time = uTime * 0.05;
 
   // cursor stir: a soft local swirl
-  vec2 m = (uMouse - 0.5 * uRes) / uRes.y;
-  vec2 dm = p - m;
-  float fall = exp(-dot(dm, dm) * 6.0) * uStir;
-  float ang = fall * 2.2;
-  p = m + mat2(cos(ang), -sin(ang), sin(ang), cos(ang)) * dm;
+  vec2 pointer = (uPointer - 0.5 * uResolution) / uResolution.y;
+  vec2 toPointer = point - pointer;
+  float stirFalloff = exp(-dot(toPointer, toPointer) * 6.0) * uStir;
+  float swirlAngle = stirFalloff * 2.2;
+  point = pointer + mat2(cos(swirlAngle), -sin(swirlAngle), sin(swirlAngle), cos(swirlAngle)) * toPointer;
 
-  vec2 sp = p * 1.5 + vec2(0.0, -t * 1.2); // plumes rise
-  vec2 q = vec2(fbm(sp + vec2(0.0, t)), fbm(sp + vec2(5.2, 1.3) - t));
-  vec2 r = vec2(fbm(sp + 4.0 * q + vec2(1.7, 9.2) + 0.6 * t),
-                fbm(sp + 4.0 * q + vec2(8.3, 2.8) - 0.5 * t));
-  float f = fbm(sp + 4.0 * r);
+  vec2 flowPoint = point * 1.5 + vec2(0.0, -time * 1.2); // plumes rise
+  vec2 firstWarp = vec2(fractalNoise(flowPoint + vec2(0.0, time)), fractalNoise(flowPoint + vec2(5.2, 1.3) - time));
+  vec2 secondWarp = vec2(fractalNoise(flowPoint + 4.0 * firstWarp + vec2(1.7, 9.2) + 0.6 * time),
+                         fractalNoise(flowPoint + 4.0 * firstWarp + vec2(8.3, 2.8) - 0.5 * time));
+  float density = fractalNoise(flowPoint + 4.0 * secondWarp);
 
-  vec3 bg     = vec3(0.027, 0.039, 0.090);
+  vec3 canvasColor = vec3(0.027, 0.039, 0.090);
   vec3 indigo = vec3(0.26, 0.30, 0.95);
   vec3 violet = vec3(0.60, 0.34, 0.95);
-  vec3 teal   = vec3(0.10, 0.68, 0.85);
+  vec3 teal = vec3(0.10, 0.68, 0.85);
 
-  float ink = smoothstep(0.38, 0.95, f);
-  vec3 tint = mix(indigo, violet, clamp(length(q) * 0.9, 0.0, 1.0));
-  tint = mix(tint, teal, clamp(r.y * r.y, 0.0, 1.0) * 0.55);
+  float ink = smoothstep(0.38, 0.95, density);
+  vec3 inkTint = mix(indigo, violet, clamp(length(firstWarp) * 0.9, 0.0, 1.0));
+  inkTint = mix(inkTint, teal, clamp(secondWarp.y * secondWarp.y, 0.0, 1.0) * 0.55);
 
-  vec3 col = bg + tint * ink * ink * 0.9 + tint * pow(ink, 5.0) * 0.6;
+  vec3 color = canvasColor + inkTint * ink * ink * 0.9 + inkTint * pow(ink, 5.0) * 0.6;
 
   // keep the reading zone (left/bottom) calmer and fade into the page
-  col = mix(col, bg, smoothstep(0.45, 0.0, uv.y) * 0.85);
-  col = mix(col, bg, smoothstep(0.55, 0.0, uv.x) * 0.35);
-  gl_FragColor = vec4(col, 1.0);
+  color = mix(color, canvasColor, smoothstep(0.45, 0.0, screenUv.y) * 0.85);
+  color = mix(color, canvasColor, smoothstep(0.55, 0.0, screenUv.x) * 0.35);
+  gl_FragColor = vec4(color, 1.0);
 }`;
 
-const VERT = `attribute vec2 a; void main(){ gl_Position = vec4(a, 0.0, 1.0); }`;
+const VERTEX_SHADER =
+	"attribute vec2 aPosition; void main(){ gl_Position = vec4(aPosition, 0.0, 1.0); }";
 
-const InkBackground = ({ className = "", resolution = 0.5 }: { className?: string; resolution?: number }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const reduce = useReducedMotion();
+/** One triangle that covers the whole viewport. */
+const FULLSCREEN_TRIANGLE = new Float32Array([-1, -1, 3, -1, -1, 3]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const gl = canvas.getContext("webgl", { antialias: false, alpha: false, powerPreference: "low-power" });
-    if (!gl) return;
+const createProgram = (webgl: WebGLRenderingContext) => {
+	const program = webgl.createProgram();
+	const vertexShader = webgl.createShader(webgl.VERTEX_SHADER);
+	const fragmentShader = webgl.createShader(webgl.FRAGMENT_SHADER);
+	if (!program || !vertexShader || !fragmentShader) return null;
 
-    const compile = (type: number, src: string) => {
-      const s = gl.createShader(type)!;
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      return s;
-    };
-    const prog = gl.createProgram()!;
-    gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
-    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
-    gl.useProgram(prog);
+	webgl.shaderSource(vertexShader, VERTEX_SHADER);
+	webgl.compileShader(vertexShader);
+	webgl.shaderSource(fragmentShader, FRAGMENT_SHADER);
+	webgl.compileShader(fragmentShader);
+	webgl.attachShader(program, vertexShader);
+	webgl.attachShader(program, fragmentShader);
+	webgl.linkProgram(program);
+	return webgl.getProgramParameter(program, webgl.LINK_STATUS) ? program : null;
+};
 
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const loc = gl.getAttribLocation(prog, "a");
-    gl.enableVertexAttribArray(loc);
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+const InkBackground = ({
+	className = "",
+	resolution = 0.5,
+}: {
+	className?: string;
+	resolution?: number;
+}) => {
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const prefersReducedMotion = useReducedMotion();
 
-    const uRes = gl.getUniformLocation(prog, "uRes");
-    const uTime = gl.getUniformLocation(prog, "uTime");
-    const uMouse = gl.getUniformLocation(prog, "uMouse");
-    const uStir = gl.getUniformLocation(prog, "uStir");
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		if (!canvas) return;
+		const webgl = canvas.getContext("webgl", {
+			antialias: false,
+			alpha: false,
+			powerPreference: "low-power",
+		});
+		if (!webgl) return;
+		const program = createProgram(webgl);
+		if (!program) return;
+		webgl.useProgram(program);
 
-    const scale = Math.min(window.devicePixelRatio || 1, 1.5) * resolution;
-    const resize = () => {
-      const r = canvas.getBoundingClientRect();
-      canvas.width = Math.max(1, Math.round(r.width * scale));
-      canvas.height = Math.max(1, Math.round(r.height * scale));
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform2f(uRes, canvas.width, canvas.height);
-    };
-    resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(canvas);
+		const vertexBuffer = webgl.createBuffer();
+		webgl.bindBuffer(webgl.ARRAY_BUFFER, vertexBuffer);
+		webgl.bufferData(
+			webgl.ARRAY_BUFFER,
+			FULLSCREEN_TRIANGLE,
+			webgl.STATIC_DRAW,
+		);
+		const positionLocation = webgl.getAttribLocation(program, "aPosition");
+		webgl.enableVertexAttribArray(positionLocation);
+		webgl.vertexAttribPointer(positionLocation, 2, webgl.FLOAT, false, 0, 0);
 
-    // pointer → smoothed position + decaying stir strength
-    const target = { x: canvas.width * 0.7, y: canvas.height * 0.6 };
-    const mouse = { ...target };
-    let stir = 0;
-    const onMove = (e: PointerEvent) => {
-      const r = canvas.getBoundingClientRect();
-      if (e.clientY > r.bottom || e.clientY < r.top) return;
-      target.x = (e.clientX - r.left) * scale;
-      target.y = (r.bottom - e.clientY) * scale;
-      stir = Math.min(1, stir + 0.08);
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
+		const resolutionUniform = webgl.getUniformLocation(program, "uResolution");
+		const timeUniform = webgl.getUniformLocation(program, "uTime");
+		const pointerUniform = webgl.getUniformLocation(program, "uPointer");
+		const stirUniform = webgl.getUniformLocation(program, "uStir");
 
-    let raf = 0;
-    let visible = true;
-    const start = performance.now();
-    const draw = (now: number) => {
-      mouse.x += (target.x - mouse.x) * 0.06;
-      mouse.y += (target.y - mouse.y) * 0.06;
-      stir *= 0.985;
-      gl.uniform1f(uTime, reduce ? 12.0 : (now - start) / 1000 + 12.0);
-      gl.uniform2f(uMouse, mouse.x, mouse.y);
-      gl.uniform1f(uStir, reduce ? 0 : stir);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-    };
-    const loop = (now: number) => {
-      draw(now);
-      if (visible && !document.hidden) raf = requestAnimationFrame(loop);
-    };
+		const pixelScale = Math.min(window.devicePixelRatio || 1, 1.5) * resolution;
+		const resizeCanvas = () => {
+			const bounds = canvas.getBoundingClientRect();
+			canvas.width = Math.max(1, Math.round(bounds.width * pixelScale));
+			canvas.height = Math.max(1, Math.round(bounds.height * pixelScale));
+			webgl.viewport(0, 0, canvas.width, canvas.height);
+			webgl.uniform2f(resolutionUniform, canvas.width, canvas.height);
+		};
+		resizeCanvas();
+		const resizeObserver = new ResizeObserver(resizeCanvas);
+		resizeObserver.observe(canvas);
 
-    const io = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      cancelAnimationFrame(raf);
-      if (visible && !reduce) raf = requestAnimationFrame(loop);
-    });
-    io.observe(canvas);
-    const onVis = () => {
-      cancelAnimationFrame(raf);
-      if (!document.hidden && visible && !reduce) raf = requestAnimationFrame(loop);
-    };
-    document.addEventListener("visibilitychange", onVis);
+		// pointer → smoothed position + decaying stir strength
+		const pointerTarget = { x: canvas.width * 0.7, y: canvas.height * 0.6 };
+		const smoothedPointer = { ...pointerTarget };
+		let stirStrength = 0;
+		const handlePointerMove = (event: PointerEvent) => {
+			const bounds = canvas.getBoundingClientRect();
+			if (event.clientY > bounds.bottom || event.clientY < bounds.top) return;
+			pointerTarget.x = (event.clientX - bounds.left) * pixelScale;
+			pointerTarget.y = (bounds.bottom - event.clientY) * pixelScale;
+			stirStrength = Math.min(1, stirStrength + 0.08);
+		};
+		window.addEventListener("pointermove", handlePointerMove, {
+			passive: true,
+		});
 
-    if (reduce) draw(performance.now());
+		let animationFrameId = 0;
+		let isOnScreen = true;
+		const startTime = performance.now();
+		const drawFrame = (timestamp: number) => {
+			smoothedPointer.x += (pointerTarget.x - smoothedPointer.x) * 0.06;
+			smoothedPointer.y += (pointerTarget.y - smoothedPointer.y) * 0.06;
+			stirStrength *= 0.985;
+			const elapsedSeconds = prefersReducedMotion
+				? 0
+				: (timestamp - startTime) / 1000;
+			webgl.uniform1f(timeUniform, elapsedSeconds + 12);
+			webgl.uniform2f(pointerUniform, smoothedPointer.x, smoothedPointer.y);
+			webgl.uniform1f(stirUniform, prefersReducedMotion ? 0 : stirStrength);
+			webgl.drawArrays(webgl.TRIANGLES, 0, 3);
+		};
+		const renderLoop = (timestamp: number) => {
+			drawFrame(timestamp);
+			if (isOnScreen && !document.hidden)
+				animationFrameId = requestAnimationFrame(renderLoop);
+		};
+		const restartLoop = () => {
+			cancelAnimationFrame(animationFrameId);
+			if (isOnScreen && !document.hidden && !prefersReducedMotion)
+				animationFrameId = requestAnimationFrame(renderLoop);
+		};
 
-    return () => {
-      cancelAnimationFrame(raf);
-      io.disconnect();
-      ro.disconnect();
-      window.removeEventListener("pointermove", onMove);
-      document.removeEventListener("visibilitychange", onVis);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
-    };
-  }, [reduce, resolution]);
+		const visibilityObserver = new IntersectionObserver(([entry]) => {
+			isOnScreen = entry.isIntersecting;
+			restartLoop();
+		});
+		visibilityObserver.observe(canvas);
+		document.addEventListener("visibilitychange", restartLoop);
 
-  return <canvas ref={canvasRef} aria-hidden="true" className={`absolute inset-0 h-full w-full ${className}`} />;
+		if (prefersReducedMotion) drawFrame(performance.now());
+
+		return () => {
+			cancelAnimationFrame(animationFrameId);
+			visibilityObserver.disconnect();
+			resizeObserver.disconnect();
+			window.removeEventListener("pointermove", handlePointerMove);
+			document.removeEventListener("visibilitychange", restartLoop);
+			webgl.getExtension("WEBGL_lose_context")?.loseContext();
+		};
+	}, [prefersReducedMotion, resolution]);
+
+	return (
+		<canvas
+			ref={canvasRef}
+			aria-hidden="true"
+			className={`absolute inset-0 h-full w-full ${className}`}
+		/>
+	);
 };
 
 export default InkBackground;
