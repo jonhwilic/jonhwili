@@ -1,5 +1,5 @@
-import { Route, Routes } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
+import { Route, Routes } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import About from "./pages/About";
